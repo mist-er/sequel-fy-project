@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const VenueController = require('../controllers/venueController');
 const { validateVenue, validateVenueSearch } = require('../middleware/validation');
-const { handleUpload } = require('../middleware/upload');
+const { handleUpload, handleMultipleUpload } = require('../middleware/upload');
 
 // @route   POST /api/venues
 // @desc    Create a new venue
 // @access  Public (for now, will add auth later)
-router.post('/', validateVenue, handleUpload, VenueController.createVenue);
+// Note: handleMultipleUpload must run before validateVenue to parse FormData into req.body
+router.post('/', handleMultipleUpload, validateVenue, VenueController.createVenue);
 
 // @route   GET /api/venues
 // @desc    Get all venues with optional filters
@@ -27,7 +28,8 @@ router.get('/:id', VenueController.getVenueById);
 // @route   PUT /api/venues/:id
 // @desc    Update venue
 // @access  Public (for now, will add auth later)
-router.put('/:id', validateVenue, handleUpload, VenueController.updateVenue);
+// Note: handleMultipleUpload must run before validateVenue to parse FormData into req.body
+router.put('/:id', handleMultipleUpload, validateVenue, VenueController.updateVenue);
 
 // @route   DELETE /api/venues/:id
 // @desc    Delete venue (soft delete)

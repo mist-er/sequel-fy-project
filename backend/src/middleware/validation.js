@@ -23,10 +23,20 @@ const validateVenue = [
     .withMessage('Location must be between 5 and 200 characters'),
 
   body('capacity')
+    .customSanitizer((value) => {
+      // Convert string to number if it's a string
+      const num = typeof value === 'string' ? parseInt(value, 10) : value;
+      return isNaN(num) ? value : num;
+    })
     .isInt({ min: 1, max: 10000 })
     .withMessage('Capacity must be a positive integer between 1 and 10,000'),
 
   body('price')
+    .customSanitizer((value) => {
+      // Convert string to number if it's a string
+      const num = typeof value === 'string' ? parseFloat(value) : value;
+      return isNaN(num) ? value : num;
+    })
     .isFloat({ min: 0 })
     .withMessage('Price must be a positive number'),
 
@@ -37,8 +47,9 @@ const validateVenue = [
 
   body('contact_phone')
     .optional()
-    .isLength({ min: 10, max: 15 })
-    .withMessage('Contact phone must be between 10 and 15 characters'),
+    .trim()
+    .matches(/^[\+]?[0-9][\d]{8,14}$/)
+    .withMessage('Please enter a valid phone number (9-15 digits, may start with + or 0)'),
 
   body('owner_id')
     .isMongoId()
@@ -328,6 +339,23 @@ const validateBookingStatus = [
   }
 ];
 
+const validateDeviceTokenRegistration = [
+  body('deviceToken')
+    .trim()
+    .notEmpty()
+    .withMessage('deviceToken is required'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array()
+      });
+    }
+    next();
+  }
+];
+
 module.exports = {
   validateVenue,
   validateUserRegistration,
@@ -335,5 +363,6 @@ module.exports = {
   validateVenueSearch,
   validateBooking,
   validateBookingUpdate,
-  validateBookingStatus
+  validateBookingStatus,
+  validateDeviceTokenRegistration
 };

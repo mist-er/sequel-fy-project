@@ -32,7 +32,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Configure multer
+// Configure multer for single file
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
@@ -42,10 +42,23 @@ const upload = multer({
   }
 });
 
-// Middleware for single image upload
+// Configure multer for multiple files
+const uploadMultiple = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 5 * 1024 * 1024, // 5MB default
+    files: 10 // Allow up to 10 images
+  }
+});
+
+// Middleware for single image upload (backward compatibility)
 const uploadSingleImage = upload.single('photo');
 
-// Middleware wrapper to handle multer errors
+// Middleware for multiple image uploads
+const uploadMultipleImages = uploadMultiple.array('photos', 10);
+
+// Middleware wrapper to handle multer errors for single upload
 const handleUpload = (req, res, next) => {
   uploadSingleImage(req, res, (err) => {
     if (err instanceof multer.MulterError) {
@@ -57,6 +70,34 @@ const handleUpload = (req, res, next) => {
       if (err.code === 'LIMIT_FILE_COUNT') {
         return res.status(400).json({
           message: 'Too many files. Only one file is allowed.'
+        });
+      }
+      return res.status(400).json({
+        message: 'File upload error',
+        error: err.message
+      });
+    } else if (err) {
+      return res.status(400).json({
+        message: 'File upload error',
+        error: err.message
+      });
+    }
+    next();
+  });
+};
+
+// Middleware wrapper to handle multer errors for multiple uploads
+const handleMultipleUpload = (req, res, next) => {
+  uploadMultipleImages(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          message: 'One or more files are too large. Maximum size is 5MB per file.'
+        });
+      }
+      if (err.code === 'LIMIT_FILE_COUNT') {
+        return res.status(400).json({
+          message: 'Too many files. Maximum 10 images allowed.'
         });
       }
       return res.status(400).json({
@@ -95,6 +136,7 @@ const getFileUrl = (filename) => {
 
 module.exports = {
   handleUpload,
+  handleMultipleUpload,
   deleteUploadedFile,
   getFileUrl
 };

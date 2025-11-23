@@ -41,11 +41,15 @@ const venueSchema = new mongoose.Schema({
   contactPhone: {
     type: String,
     trim: true,
-    match: [/^[\+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number']
+    match: [/^[\+]?[0-9][\d]{8,14}$/, 'Please enter a valid phone number (9-15 digits, may start with + or 0)']
   },
   photoUrl: {
     type: String,
     trim: true
+  },
+  photoUrls: {
+    type: [String],
+    default: []
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

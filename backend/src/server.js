@@ -11,15 +11,30 @@ const connectDB = require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configure CORS to allow frontend origin
+const corsOptions = {
+  origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(helmet());
-app.use(cors());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false
+}));
+app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files (for uploaded images)
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Serve static files (for uploaded images) with CORS headers
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}, express.static(path.join(__dirname, '../uploads')));
 
 // Routes
 app.get('/', (req, res) => {

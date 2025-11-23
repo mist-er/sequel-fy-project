@@ -33,11 +33,17 @@ class VenueController {
         });
       }
 
-      // Handle photo upload
-      let photoUrl = null;
-      if (req.file) {
-        photoUrl = getFileUrl(req.file.filename);
+      // Handle photo uploads (multiple images)
+      let photoUrls = [];
+      if (req.files && req.files.length > 0) {
+        photoUrls = req.files.map(file => getFileUrl(file.filename));
+      } else if (req.file) {
+        // Backward compatibility: single image upload
+        photoUrls = [getFileUrl(req.file.filename)];
       }
+      
+      // Set photoUrl to first image for backward compatibility
+      const photoUrl = photoUrls.length > 0 ? photoUrls[0] : null;
 
       // Create venue data
       const venueData = {
@@ -49,6 +55,7 @@ class VenueController {
         contactEmail: contact_email,
         contactPhone: contact_phone,
         photoUrl,
+        photoUrls,
         owner: owner_id
       };
 
@@ -213,19 +220,22 @@ class VenueController {
         });
       }
 
-      // Handle photo upload
-      let photoUrl = existingVenue.photoUrl;
-      if (req.file) {
-        // Delete old photo if exists
-        if (existingVenue.photoUrl) {
-          const oldFilename = path.basename(existingVenue.photoUrl);
-          const oldPath = path.join(__dirname, '../../uploads', oldFilename);
-          deleteUploadedFile(oldPath);
-        }
-        
-        // Set new photo URL
-        photoUrl = getFileUrl(req.file.filename);
+      // Handle photo uploads (multiple images)
+      let photoUrls = existingVenue.photoUrls && existingVenue.photoUrls.length > 0 
+        ? [...existingVenue.photoUrls] 
+        : (existingVenue.photoUrl ? [existingVenue.photoUrl] : []);
+      
+      if (req.files && req.files.length > 0) {
+        // Add new photos to existing ones
+        const newPhotoUrls = req.files.map(file => getFileUrl(file.filename));
+        photoUrls = [...photoUrls, ...newPhotoUrls];
+      } else if (req.file) {
+        // Backward compatibility: single image upload
+        photoUrls.push(getFileUrl(req.file.filename));
       }
+      
+      // Set photoUrl to first image for backward compatibility
+      const photoUrl = photoUrls.length > 0 ? photoUrls[0] : existingVenue.photoUrl;
 
       // Prepare update data
       const updateData = {
@@ -236,7 +246,8 @@ class VenueController {
         price: price ? parseFloat(price) : existingVenue.price,
         contactEmail: contact_email !== undefined ? contact_email : existingVenue.contactEmail,
         contactPhone: contact_phone !== undefined ? contact_phone : existingVenue.contactPhone,
-        photoUrl
+        photoUrl,
+        photoUrls
       };
 
       // Update venue
@@ -306,6 +317,7 @@ class VenueController {
   static async getVenuesByOwner(req, res) {
     try {
       const { ownerId } = req.params;
+      const { includeDeleted } = req.query; // Optional query param to include deleted venues
       
       // Check if owner exists
       const owner = await User.findById(ownerId);
@@ -315,7 +327,15 @@ class VenueController {
         });
       }
 
-      const venues = await Venue.findWithFilters({ ownerId: ownerId });
+      // Build query - by default, only show active venues (exclude deleted)
+      const query = { owner: ownerId };
+      if (includeDeleted !== 'true') {
+        query.isActive = true;
+      }
+
+      const venues = await Venue.find(query)
+        .populate('owner', 'name email role')
+        .sort({ createdAt: -1 });
 
       res.json({
         message: 'Owner venues retrieved successfully',

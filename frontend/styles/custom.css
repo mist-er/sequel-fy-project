@@ -9,37 +9,60 @@
     --text-muted: #6c757d;
 }
 
-/* Override Bootstrap Primary Color */
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+/* Override Bootstrap Primary Color - Orange Theme */
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
+.btn-primary:hover,
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    color: white !important;
 }
 
 .btn-outline-primary {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
 }
 
-.btn-outline-primary:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
 }
 
-.text-primary {
+.text-primary,
+a.text-primary,
+.text-primary:hover {
     color: var(--primary-color) !important;
 }
 
-.bg-primary {
+.bg-primary,
+.bg-primary:hover {
     background-color: var(--primary-color) !important;
 }
 
 .badge.bg-primary {
     background-color: var(--primary-color) !important;
+}
+
+/* Override any Bootstrap blue colors */
+a.text-primary:hover,
+a.text-primary:focus {
+    color: var(--primary-dark) !important;
+}
+
+/* Ensure navbar brand uses orange */
+.navbar-brand.text-primary {
+    color: var(--primary-color) !important;
 }
 
 /* Hero Section */
@@ -54,10 +77,10 @@
 }
 
 .hero-bg {
-    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+    background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.25)), 
                 url('./uploads/image.png');
     background-size: cover;
-    background-position: center;
+    background-position: 50% 0%;
     background-attachment: fixed;
     background-repeat: no-repeat;
 }

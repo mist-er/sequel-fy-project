@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const BookingController = require('../controllers/bookingController');
 const { validateBooking, validateBookingUpdate, validateBookingStatus } = require('../middleware/validation');
+const verifyFirebaseIdToken = require('../middleware/firebaseAuth');
 
 // @route   POST /api/bookings
 // @desc    Create a new booking
 // @access  Public (for now, will add auth later)
-router.post('/', validateBooking, BookingController.createBooking);
+router.post('/', verifyFirebaseIdToken, validateBooking, BookingController.createBooking);
 
 // @route   GET /api/bookings
 // @desc    Get all bookings with optional filters
@@ -21,17 +22,17 @@ router.get('/:id', BookingController.getBookingById);
 // @route   PUT /api/bookings/:id
 // @desc    Update booking details
 // @access  Public (for now, will add auth later)
-router.put('/:id', validateBookingUpdate, BookingController.updateBooking);
+router.put('/:id', verifyFirebaseIdToken, validateBookingUpdate, BookingController.updateBooking);
 
 // @route   PATCH /api/bookings/:id/status
 // @desc    Update booking status
 // @access  Public (for now, will add auth later)
-router.patch('/:id/status', validateBookingStatus, BookingController.updateBookingStatus);
+router.patch('/:id/status', verifyFirebaseIdToken, validateBookingStatus, BookingController.updateBookingStatus);
 
 // @route   DELETE /api/bookings/:id
 // @desc    Delete booking
 // @access  Public (for now, will add auth later)
-router.delete('/:id', BookingController.deleteBooking);
+router.delete('/:id', verifyFirebaseIdToken, BookingController.deleteBooking);
 
 // @route   GET /api/bookings/organizer/:organizerId
 // @desc    Get all bookings by organizer

@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Venue = require('../models/Venue');
 const User = require('../models/User');
+const { sendBookingConfirmationNotification } = require('../services/notificationService');
 
 class BookingController {
   // Create a new booking
@@ -45,6 +46,21 @@ class BookingController {
         });
       }
 
+      // Attach Firebase identity to organizer if applicable
+      if (req.firebaseUser) {
+        if (organizer.firebaseUid && organizer.firebaseUid !== req.firebaseUser.uid) {
+          return res.status(403).json({
+            message: 'You are not authorized to create bookings for this organizer.'
+          });
+        }
+
+        if (!organizer.firebaseUid) {
+          organizer.firebaseUid = req.firebaseUser.uid;
+          organizer.phoneNumber = organizer.phoneNumber || req.firebaseUser.phone_number || null;
+          await organizer.save();
+        }
+      }
+
       // Check if venue is available for the requested date
       const isAvailable = await venue.isAvailableForDate(event_date);
       if (!isAvailable) {
@@ -72,8 +88,21 @@ class BookingController {
       const booking = await Booking.create(bookingData);
       await booking.populate([
         { path: 'venue', select: 'name location capacity price owner' },
-        { path: 'organizer', select: 'name email role' }
+        { path: 'organizer', select: 'name email role fcmTokens' }
       ]);
+
+      if (organizer.fcmTokens && organizer.fcmTokens.length) {
+        const eventDateTime = `${booking.eventDate.toDateString()} ${booking.startTime}`;
+        await Promise.allSettled(
+          organizer.fcmTokens.map((token) =>
+            sendBookingConfirmationNotification({
+              token,
+              venueName: venue.name,
+              eventDateTime
+            })
+          )
+        );
+      }
 
       res.status(201).json({
         message: 'Booking created successfully',
@@ -185,6 +214,15 @@ class BookingController {
         });
       }
 
+      if (req.firebaseUser) {
+        const organizer = await User.findById(booking.organizer);
+        if (organizer && organizer.firebaseUid && organizer.firebaseUid !== req.firebaseUser.uid) {
+          return res.status(403).json({
+            message: 'You are not authorized to update this booking status.'
+          });
+        }
+      }
+
       // Validate status
       const validStatuses = ['pending', 'confirmed', 'cancelled'];
       if (!validStatuses.includes(status)) {
@@ -234,6 +272,20 @@ class BookingController {
         return res.status(404).json({
           message: 'Booking not found'
         });
+      }
+
+      if (req.firebaseUser) {
+        const organizer = await User.findById(existingBooking.organizer);
+        if (!organizer) {
+          return res.status(404).json({
+            message: 'Organizer not found'
+          });
+        }
+        if (organizer.firebaseUid && organizer.firebaseUid !== req.firebaseUser.uid) {
+          return res.status(403).json({
+            message: 'You are not authorized to update this booking.'
+          });
+        }
       }
 
       // Check if booking can be modified (only pending bookings)
@@ -314,6 +366,15 @@ class BookingController {
         return res.status(400).json({
           message: 'Only pending bookings can be deleted'
         });
+      }
+
+      if (req.firebaseUser) {
+        const organizer = await User.findById(booking.organizer);
+        if (organizer && organizer.firebaseUid && organizer.firebaseUid !== req.firebaseUser.uid) {
+          return res.status(403).json({
+            message: 'You are not authorized to delete this booking.'
+          });
+        }
       }
 
       // Delete booking

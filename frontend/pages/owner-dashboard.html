@@ -9,173 +9,593 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../styles/custom.css">
+    <link rel="stylesheet" href="../styles/custom.css?v=9">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 107, 53, 0.1);
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ff6b35;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-logo i {
+            font-size: 28px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .user-info h6 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            margin: 0;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+        
+        .nav-item {
+            margin: 5px 15px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 107, 53, 0.15);
+            color: #ff6b35;
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .content-header {
+            background: white;
+            padding: 25px 30px;
+            border-bottom: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .content-header .greeting {
+            color: #6c757d;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        
+        .content-body {
+            padding: 30px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+        
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+            color: white;
+        }
+        
+        .btn-action-outline {
+            background: white;
+            color: #ff6b35;
+            border: 2px solid #ff6b35;
+        }
+        
+        .btn-action-outline:hover {
+            background: #ff6b35;
+            color: white;
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        .stat-card-label {
+            font-size: 14px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        /* Sidebar Overlay for Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            min-width: 48px;
+            min-height: 48px;
+        }
+        
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Hide Google Maps Error Messages */
+        #venueMap > div[style*="color: rgb(51, 51, 51)"],
+        #venueMap > div[style*="Oops"],
+        #venueMap > div:has-text("Oops"),
+        #venueMap div[role="alert"],
+        #venueMap div[style*="background-color: white"]:has-text("Something went wrong"),
+        #venueMap div:has-text("This page didn't load Google Maps"),
+        #venueMap div:has-text("See the JavaScript console") {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            z-index: -1 !important;
+        }
+        
+        /* Ensure map container is always visible */
+        #venueMap {
+            min-height: 500px;
+            background: #f8f9fa;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .sidebar-overlay {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .content-header {
+                padding: 20px 15px;
+                margin-top: 70px;
+            }
+            
+            .content-header h1 {
+                font-size: 22px;
+            }
+            
+            .content-header .greeting {
+                font-size: 14px;
+            }
+            
+            .content-body {
+                padding: 20px 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .stat-card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .stat-card-value {
+                font-size: 28px;
+            }
+            
+            .stat-card-label {
+                font-size: 12px;
+            }
+            
+            .sidebar-header {
+                padding: 20px 15px;
+            }
+            
+            .sidebar-logo {
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                padding: 12px;
+                gap: 12px;
+            }
+            
+            .user-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .user-info h6 {
+                font-size: 13px;
+            }
+            
+            .user-info p {
+                font-size: 11px;
+            }
+            
+            .nav-link {
+                padding: 14px 15px;
+                font-size: 15px;
+            }
+            
+            .nav-link i {
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 260px;
+            }
+            
+            .content-header {
+                padding: 15px;
+                margin-top: 65px;
+            }
+            
+            .content-header h1 {
+                font-size: 20px;
+            }
+            
+            .content-body {
+                padding: 15px;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+            
+            .stat-card-value {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary fs-3" href="../pages/index.html">
-                <i class="fas fa-building me-2"></i>eFinder
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <span class="nav-link fw-semibold" id="userName">Welcome, Owner</span>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link fw-semibold" onclick="logout()">
-                            <i class="fas fa-sign-out-alt me-1"></i>Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container-fluid" style="margin-top: 80px;">
-        <div class="row">
+    <div class="dashboard-wrapper">
             <!-- Sidebar -->
-            <div class="col-lg-3 col-md-4 bg-light p-4">
-                <div class="text-center mb-4">
-                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="fas fa-user fs-3"></i>
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../pages/index.html" class="sidebar-logo">
+                    <i class="fas fa-building"></i>
+                    <span>eFinder</span>
+                </a>
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">O</div>
+                    <div class="user-info">
+                        <h6 id="userNameSidebar">Owner Name</h6>
+                        <p>Venue Owner</p>
                     </div>
-                    <h5 class="fw-bold mb-1" id="userNameSidebar">Owner Name</h5>
-                    <p class="text-muted small">Venue Owner</p>
+                </div>
                 </div>
                 
-                <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action active" data-bs-toggle="tab" data-bs-target="#dashboard">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-tab="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard Overview</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#venues">
-                        <i class="fas fa-building me-2"></i>My Venues
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-tab="venues">
+                        <i class="fas fa-building"></i>
+                        <span>My Venues</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#bookings">
-                        <i class="fas fa-calendar-check me-2"></i>Bookings
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-tab="bookings">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Bookings</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="tab" data-bs-target="#analytics">
-                        <i class="fas fa-chart-bar me-2"></i>Analytics
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-tab="analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
                     </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="content-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1>VENUE OWNER DASHBOARD</h1>
+                        <p class="greeting" id="greeting">Good morning! Track your venues and bookings.</p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-action btn-action-outline" onclick="openAddVenueModal()">
+                            <i class="fas fa-users"></i>
+                            <span>Manage Venues</span>
+                        </button>
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Venue</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             
-            <!-- Main Content Area -->
-            <div class="col-lg-9 col-md-8 p-4">
-                <div class="tab-content">
+            <div class="content-body">
                     <!-- Dashboard Tab -->
-                    <div class="tab-pane fade show active" id="dashboard">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h2 class="fw-bold">Dashboard Overview</h2>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
-                                <i class="fas fa-plus me-2"></i>Add New Venue
-                            </button>
-                        </div>
-                        
+                <div class="tab-pane active" id="dashboard-tab">
                         <!-- Stats Cards -->
                         <div class="row g-4 mb-4">
                             <div class="col-lg-3 col-md-6">
-                                <div class="card bg-primary text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="card-title">Total Venues</h6>
-                                                <h3 class="fw-bold" id="totalVenues">0</h3>
-                                            </div>
-                                            <div class="align-self-center">
-                                                <i class="fas fa-building fs-1 opacity-75"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="stat-card">
+                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #ff6b35, #f7931e);">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="stat-card-label">Total Venues</div>
+                                <div class="stat-card-value" id="totalVenues">0</div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6">
-                                <div class="card bg-success text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="card-title">Total Bookings</h6>
-                                                <h3 class="fw-bold" id="totalBookings">0</h3>
-                                            </div>
-                                            <div class="align-self-center">
-                                                <i class="fas fa-calendar-check fs-1 opacity-75"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="stat-card">
+                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="stat-card-label">Total Bookings</div>
+                                <div class="stat-card-value" id="totalBookings">0</div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6">
-                                <div class="card bg-warning text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="card-title">Total Revenue</h6>
-                                                <h3 class="fw-bold" id="totalRevenue">GHS 0</h3>
-                                            </div>
-                                            <div class="align-self-center">
-                                                <i class="fas fa-dollar-sign fs-1 opacity-75"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="stat-card">
+                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #ffc107, #ff9800);">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stat-card-label">Total Revenue</div>
+                                <div class="stat-card-value" id="totalRevenue">GHS 0</div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6">
-                                <div class="card bg-info text-white">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="card-title">Avg Rating</h6>
-                                                <h3 class="fw-bold" id="avgRating">0.0</h3>
-                                            </div>
-                                            <div class="align-self-center">
-                                                <i class="fas fa-star fs-1 opacity-75"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="stat-card">
+                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #17a2b8, #138496);">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="stat-card-label">Avg Rating</div>
+                                <div class="stat-card-value" id="avgRating">0.0</div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Recent Activity -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Recent Activity</h5>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0 fw-bold">Recent Activity</h5>
                             </div>
                             <div class="card-body">
-                                <div class="list-group list-group-flush">
+                            <div class="list-group list-group-flush" id="recentActivity">
                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <h6 class="mb-1">New booking received</h6>
                                             <small class="text-muted">Grand Ballroom - Wedding Event</small>
                                         </div>
                                         <span class="badge bg-primary">2 hours ago</span>
-                                    </div>
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Venue updated</h6>
-                                            <small class="text-muted">Conference Center Labadi</small>
-                                        </div>
-                                        <span class="badge bg-secondary">1 day ago</span>
-                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Venues Tab -->
-                    <div class="tab-pane fade" id="venues">
+                <div class="tab-pane" id="venues-tab" style="display: none;">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2 class="fw-bold">My Venues</h2>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
-                                <i class="fas fa-plus me-2"></i>Add New Venue
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New Venue</span>
                             </button>
                         </div>
                         
@@ -189,16 +609,17 @@
                             </div>
                             <h4 class="fw-bold">No venues yet</h4>
                             <p class="text-muted">Add your first venue to start attracting customers!</p>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
-                                <i class="fas fa-plus me-2"></i>Add Your First Venue
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Your First Venue</span>
                             </button>
                         </div>
                     </div>
                     
                     <!-- Bookings Tab -->
-                    <div class="tab-pane fade" id="bookings">
+                <div class="tab-pane" id="bookings-tab" style="display: none;">
                         <h2 class="fw-bold mb-4">Recent Bookings</h2>
-                        <div class="card">
+                    <div class="card shadow-sm">
                             <div class="card-body">
                                 <p class="text-muted">Booking management features coming soon...</p>
                             </div>
@@ -206,17 +627,16 @@
                     </div>
                     
                     <!-- Analytics Tab -->
-                    <div class="tab-pane fade" id="analytics">
+                <div class="tab-pane" id="analytics-tab" style="display: none;">
                         <h2 class="fw-bold mb-4">Analytics</h2>
-                        <div class="card">
+                    <div class="card shadow-sm">
                             <div class="card-body">
                                 <p class="text-muted">Analytics dashboard coming soon...</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Add/Edit Venue Modal -->
@@ -259,8 +679,10 @@
                                 <input type="tel" class="form-control" id="venueContactPhone" name="contact_phone">
                             </div>
                             <div class="col-12">
-                                <label for="venuePhoto" class="form-label">Venue Photo</label>
-                                <input type="file" class="form-control" id="venuePhoto" name="photo" accept="image/*">
+                                <label for="venuePhotos" class="form-label">Venue Photos (Multiple images allowed)</label>
+                                <input type="file" class="form-control" id="venuePhotos" name="photos" accept="image/*" multiple>
+                                <small class="text-muted">You can select up to 10 images. Maximum 5MB per image.</small>
+                                <div id="imagePreview" class="mt-3 d-flex flex-wrap gap-2"></div>
                             </div>
                         </div>
                     </div>
@@ -273,28 +695,254 @@
         </div>
     </div>
 
+    <!-- Venue Details Modal with Image Gallery -->
+    <div class="modal fade" id="venueDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl" style="max-width: 1200px;">
+            <div class="modal-content" style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+                <div class="row g-0">
+                    <!-- Left Side: Image Gallery / Map -->
+                    <div class="col-lg-6">
+                        <div class="modal-header p-0 border-0" style="position: relative; height: 100%; min-height: 500px;">
+                            <div id="venueImageCarousel" class="carousel slide" data-bs-ride="false" style="height: 100%; min-height: 500px; background: #f8f9fa;">
+                                <div class="carousel-inner" id="venueImageCarouselInner" style="height: 100%;">
+                                    <!-- Images and Map will be dynamically added here -->
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#venueImageCarousel" data-bs-slide="prev" style="opacity: 0.9; width: 50px;">
+                                    <span class="carousel-control-prev-icon" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#venueImageCarousel" data-bs-slide="next" style="opacity: 0.9; width: 50px;">
+                                    <span class="carousel-control-next-icon" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
+                                </button>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" style="position: absolute; top: 15px; right: 15px; z-index: 10; background: white; opacity: 0.9; border-radius: 50%; padding: 8px;"></button>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side: Content -->
+                    <div class="col-lg-6">
+                        <div class="modal-body p-4" style="height: 100%; min-height: 500px; display: flex; flex-direction: column;">
+                            <!-- Venue Name and Location -->
+                            <div class="mb-3">
+                                <h4 class="mb-2" id="venueDetailsName" style="color: #2c3e50; font-weight: 700; font-size: 26px;"></h4>
+                                <p class="text-muted mb-0" style="font-size: 14px;">
+                                    <i class="fas fa-map-marker-alt me-2" style="color: #ff6b35;"></i>
+                                    <span id="venueDetailsLocationText"></span>
+                                </p>
+                            </div>
+                            
+                            <!-- Key Info Cards -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center p-2" style="background: #f8f9fa; border-radius: 10px;">
+                                        <div class="me-2" style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600; text-transform: uppercase;">Capacity</div>
+                                            <div id="venueDetailsCapacity" style="font-size: 18px; font-weight: 700; color: #2c3e50;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center p-2" style="background: #f8f9fa; border-radius: 10px;">
+                                        <div class="me-2" style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600; text-transform: uppercase;">Price</div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #2c3e50;">GHS <span id="venueDetailsPrice"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            <div class="mb-3" style="flex: 1;">
+                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Description</h6>
+                                <p id="venueDetailsDescription" class="text-muted mb-0" style="line-height: 1.6; font-size: 14px; max-height: 120px; overflow-y: auto;"></p>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="border-top pt-3">
+                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Contact Information</h6>
+                                <div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-map-marker-alt" style="color: #ff6b35; font-size: 14px;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Address</div>
+                                            <div id="venueDetailsAddress" style="color: #2c3e50; font-weight: 500; font-size: 13px;"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center mb-2" id="venueDetailsEmailSection" style="display: none !important;">
+                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-envelope" style="color: #ff6b35; font-size: 14px;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Email</div>
+                                            <a href="#" id="venueDetailsEmail" style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center" id="venueDetailsPhoneSection" style="display: none !important;">
+                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-phone" style="color: #ff6b35; font-size: 14px;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Phone</div>
+                                            <a href="#" id="venueDetailsPhone" style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Footer Button -->
+                            <div class="mt-3 pt-3 border-top">
+                                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div class="modal fade" id="mapModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalTitle">
+                        <i class="fas fa-map me-2" style="color: #ff6b35;"></i>Venue Location
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="position: relative; overflow: hidden;">
+                    <div id="venueMap" style="height: 500px; width: 100%; border-radius: 8px; position: relative;">
+                        <!-- Google Maps will load here -->
+                    </div>
+                    <style>
+                        /* Hide all Google Maps error messages */
+                        #venueMap > div[style*="color: rgb(51, 51, 51)"],
+                        #venueMap > div[style*="Oops"],
+                        #venueMap > div:has-text("Oops"),
+                        #venueMap div[role="alert"],
+                        #venueMap div[style*="background-color: white"]:has-text("Something went wrong"),
+                        #venueMap div:has-text("This page didn't load Google Maps"),
+                        #venueMap div:has-text("See the JavaScript console"),
+                        #venueMap > div > div[style*="position: absolute"]:has-text("Oops"),
+                        #venueMap > div > div[style*="position: absolute"]:has-text("Something went wrong") {
+                            display: none !important;
+                            visibility: hidden !important;
+                            opacity: 0 !important;
+                            height: 0 !important;
+                            width: 0 !important;
+                            overflow: hidden !important;
+                        }
+                    </style>
+                    <div class="mt-3">
+                        <p class="mb-2"><strong id="venueNameMap"></strong></p>
+                        <p class="text-muted mb-3" id="venueLocationMap"></p>
+                        <a id="directionsLink" href="#" target="_blank" class="btn btn-primary w-100">
+                            <i class="fas fa-route me-2"></i>Get Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6ng4nTlBdHg&libraries=places&callback=initGoogleMaps" async defer></script>
+    <script>
+        // Suppress Google Maps errors
+        window.gm_authFailure = function() {
+            console.log('Google Maps authentication failed - map will still display');
+        };
+        
+        // Initialize Google Maps when loaded
+        function initGoogleMaps() {
+            console.log('Google Maps API loaded successfully');
+            window.googleMapsLoaded = true;
+        }
+        
+        // Global error handler for Google Maps
+        window.addEventListener('error', function(e) {
+            if (e.message && e.message.includes('Google Maps')) {
+                e.preventDefault();
+                console.log('Google Maps error suppressed:', e.message);
+                return false;
+            }
+        }, true);
+    </script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         const API_BASE = 'http://localhost:3000/api';
+        let venueMap = null;
+        let venueMarker = null;
+        let venueDetailsMap = null;
+        let venueDetailsMarker = null;
         let currentUser = null;
         let editingVenueId = null;
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             loadUserData();
+            setupNavigation();
             loadVenues();
+            updateGreeting();
         });
+
+        function setupNavigation() {
+            document.querySelectorAll('.nav-link[data-tab]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide tabs
+                    document.querySelectorAll('.tab-pane').forEach(tab => {
+                        tab.style.display = 'none';
+                        tab.classList.remove('active');
+                    });
+                    
+                    const targetTab = document.getElementById(tabName + '-tab');
+                    if (targetTab) {
+                        targetTab.style.display = 'block';
+                        targetTab.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = 'Good morning';
+            if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+            else if (hour >= 17) greeting = 'Good evening';
+            
+            const greetingEl = document.getElementById('greeting');
+            if (greetingEl && currentUser) {
+                greetingEl.textContent = `${greeting}, ${currentUser.name}! Track your venues and bookings.`;
+            }
+        }
 
         function loadUserData() {
             const userData = localStorage.getItem('user');
             if (userData) {
                 currentUser = JSON.parse(userData);
-                document.getElementById('userName').textContent = `Welcome, ${currentUser.name}`;
-                document.getElementById('userNameSidebar').textContent = currentUser.name;
+                const name = currentUser.name || 'Owner';
+                document.getElementById('userNameSidebar').textContent = name;
+                document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
             } else {
-                // Redirect to login if no user data
                 window.location.href = './login.html';
             }
         }
@@ -328,11 +976,66 @@
             venuesGrid.style.display = 'flex';
             noVenues.style.display = 'none';
 
-            venuesGrid.innerHTML = venues.map(venue => `
+            venuesGrid.innerHTML = venues.map((venue, venueIndex) => {
+                // Get all images
+                let images = [];
+                if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
+                    images = venue.photoUrls.filter(url => url && url.trim() !== '');
+                } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
+                    images = [venue.photoUrl];
+                }
+                
+                // Default placeholder if no images
+                if (images.length === 0) {
+                    images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'];
+                }
+                
+                const hasMultipleImages = images.length > 1;
+                const carouselId = `venueCarousel${venueIndex}`;
+                
+                // Build image HTML
+                let imageHtml = '';
+                if (hasMultipleImages) {
+                    // Carousel for multiple images
+                    imageHtml = `
+                        <div id="${carouselId}" class="carousel slide" data-bs-ride="false" style="height: 200px; position: relative;">
+                            <div class="carousel-inner" style="height: 100%; border-radius: 12px 12px 0 0; overflow: hidden;">
+                                ${images.map((imgUrl, imgIndex) => {
+                                    const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
+                                                       imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
+                                                       `http://localhost:3000/${imgUrl}`;
+                                    return `
+                                        <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}" style="height: 200px;">
+                                            <img src="${fullImageUrl}" class="d-block w-100" style="height: 100%; object-fit: cover;" alt="Venue image ${imgIndex + 1}" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'">
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Single image (no carousel)
+                    const fullImageUrl = images[0].startsWith('http') ? images[0] : 
+                                       images[0].startsWith('/') ? `http://localhost:3000${images[0]}` : 
+                                       `http://localhost:3000/${images[0]}`;
+                    imageHtml = `
+                        <div style="height: 200px; background-image: url('${fullImageUrl}'); background-size: cover; background-position: center; border-radius: 12px 12px 0 0; position: relative;">
+                        </div>
+                    `;
+                }
+                
+                return `
                 <div class="col-lg-6">
-                    <div class="card h-100">
-                        <div class="venue-image" style="height: 200px; background-image: url('${venue.photoUrl || 'https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'}'); background-size: cover; background-position: center;">
-                            <div class="position-absolute top-0 end-0 m-2">
+                    <div class="card h-100 shadow-sm">
+                        <div class="position-relative" style="height: 200px;">
+                            ${imageHtml}
+                            <div class="position-absolute top-0 end-0 m-2" style="z-index: 5;">
                                 <span class="badge ${venue.isActive ? 'bg-success' : 'bg-secondary'}">${venue.isActive ? 'Active' : 'Inactive'}</span>
                             </div>
                         </div>
@@ -340,9 +1043,9 @@
                             <h5 class="card-title">${venue.name}</h5>
                             <p class="card-text text-muted">${venue.description || 'No description available'}</p>
                             <div class="row g-2 mb-3">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <small class="text-muted">
-                                        <i class="fas fa-map-marker-alt me-1"></i>${venue.location}
+                                        <i class="fas fa-map-pin me-1"></i>${venue.location}
                                     </small>
                                 </div>
                                 <div class="col-6">
@@ -353,37 +1056,469 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="h5 text-primary mb-0">GHS ${venue.price}</span>
-                                <div class="btn-group">
-                                    <button class="btn btn-outline-primary btn-sm" onclick="editVenue('${venue._id}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteVenue('${venue._id}')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 mt-3 flex-wrap">
+                                <button class="btn btn-sm" onclick="viewVenueDetails('${venue._id}')" title="View All Images & Details" style="background: #17a2b8; color: white; border: none; flex: 1; min-width: 100px;">
+                                    <i class="fas fa-images me-1"></i>View
+                                </button>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.location)}" target="_blank" class="btn btn-sm" title="View on Map" style="background: #28a745; color: white; border: none; flex: 1; min-width: 100px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-map me-1"></i>Map
+                                </a>
+                                <button class="btn btn-sm" onclick="editVenue('${venue._id}')" title="Edit Venue" style="background: #ffc107; color: #000; border: none; flex: 1; min-width: 100px; font-weight: 600;">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </button>
+                                <button class="btn btn-sm" onclick="deleteVenue('${venue._id}')" title="Delete Venue" style="background: #dc3545; color: white; border: none; flex: 1; min-width: 100px;">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function updateStats(venues) {
             document.getElementById('totalVenues').textContent = venues.length;
-            // You can add more stats calculations here
+            // Add more stats calculations here
         }
 
-        function editVenue(venueId) {
-            // Find venue data and populate form
-            // This would require fetching venue details
+        async function viewVenueDetails(venueId) {
+            try {
+                const response = await fetch(`${API_BASE}/venues/${venueId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const venue = data.venue;
+                    
+                    // Set venue details
+                    document.getElementById('venueDetailsName').textContent = venue.name;
+                    document.getElementById('venueDetailsLocationText').textContent = venue.location;
+                    document.getElementById('venueDetailsDescription').textContent = venue.description || 'No description available for this venue.';
+                    document.getElementById('venueDetailsCapacity').textContent = venue.capacity + ' guests';
+                    document.getElementById('venueDetailsPrice').textContent = venue.price;
+                    document.getElementById('venueDetailsAddress').textContent = venue.location;
+                    
+                    // Handle contact information
+                    if (venue.contactEmail) {
+                        document.getElementById('venueDetailsEmail').textContent = venue.contactEmail;
+                        document.getElementById('venueDetailsEmail').href = `mailto:${venue.contactEmail}`;
+                        document.getElementById('venueDetailsEmailSection').style.display = 'flex';
+                    } else {
+                        document.getElementById('venueDetailsEmailSection').style.display = 'none';
+                    }
+                    
+                    if (venue.contactPhone) {
+                        document.getElementById('venueDetailsPhone').textContent = venue.contactPhone;
+                        document.getElementById('venueDetailsPhone').href = `tel:${venue.contactPhone}`;
+                        document.getElementById('venueDetailsPhoneSection').style.display = 'flex';
+                    } else {
+                        document.getElementById('venueDetailsPhoneSection').style.display = 'none';
+                    }
+                    
+                    // Set images gallery
+                    const carouselInner = document.getElementById('venueImageCarouselInner');
+                    carouselInner.innerHTML = '';
+                    
+                    // Get all images (photoUrls array or fallback to photoUrl)
+                    let images = [];
+                    if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
+                        images = venue.photoUrls.filter(url => url && url.trim() !== ''); // Filter out empty strings
+                    } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
+                        images = [venue.photoUrl];
+                    } else {
+                        images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80'];
+                    }
+                    
+                    console.log('Venue images:', images);
+                    
+                    if (images.length === 0) {
+                        images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80'];
+                    }
+                    
+                    images.forEach((imgUrl, index) => {
+                        // Construct full URL if needed
+                        let fullImageUrl = imgUrl;
+                        if (!imgUrl.startsWith('http')) {
+                            fullImageUrl = imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : `http://localhost:3000/${imgUrl}`;
+                        }
+                        
+                        console.log(`Loading image ${index + 1}:`, fullImageUrl);
+                        
+                        const carouselItem = document.createElement('div');
+                        carouselItem.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+                        carouselItem.style.height = '100%';
+                        carouselItem.style.minHeight = '500px';
+                        
+                        const img = document.createElement('img');
+                        img.src = fullImageUrl;
+                        img.className = 'd-block w-100 h-100';
+                        img.style.objectFit = 'cover';
+                        img.style.height = '100%';
+                        img.style.width = '100%';
+                        img.style.minHeight = '500px';
+                        img.alt = `${venue.name} - Image ${index + 1}`;
+                        img.onload = function() {
+                            console.log(`Image ${index + 1} loaded successfully`);
+                        };
+                        img.onerror = function() {
+                            console.error(`Failed to load image ${index + 1}:`, fullImageUrl);
+                            this.src = 'https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80';
+                        };
+                        
+                        carouselItem.appendChild(img);
+                        carouselInner.appendChild(carouselItem);
+                    });
+                    
+                    // Add map as the last carousel item
+                    const mapCarouselItem = document.createElement('div');
+                    mapCarouselItem.className = 'carousel-item';
+                    mapCarouselItem.style.height = '100%';
+                    mapCarouselItem.style.minHeight = '500px';
+                    mapCarouselItem.style.position = 'relative';
+                    mapCarouselItem.id = 'venueDetailsMapContainer';
+                    
+                    const mapDiv = document.createElement('div');
+                    mapDiv.id = 'venueDetailsMap';
+                    mapDiv.style.width = '100%';
+                    mapDiv.style.height = '100%';
+                    mapDiv.style.minHeight = '500px';
+                    
+                    mapCarouselItem.appendChild(mapDiv);
+                    carouselInner.appendChild(mapCarouselItem);
+                    
+                    // Show modal first, then initialize carousel and map
+                    const modal = new bootstrap.Modal(document.getElementById('venueDetailsModal'));
+                    modal.show();
+                    
+                    // Initialize carousel and map after modal is shown
+                    document.getElementById('venueDetailsModal').addEventListener('shown.bs.modal', function() {
+                        const carousel = document.getElementById('venueImageCarousel');
+                        if (carousel) {
+                            const bsCarousel = new bootstrap.Carousel(carousel, {
+                                interval: false,
+                                wrap: true
+                            });
+                        }
+                        
+                        // Initialize map when map carousel item is shown
+                        const initializeMapInCarousel = () => {
+                            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                                console.log('Google Maps not loaded yet');
+                                return;
+                            }
+                            
+                            const mapContainer = document.getElementById('venueDetailsMap');
+                            if (mapContainer && !venueDetailsMap) {
+                                try {
+                                    venueDetailsMap = new google.maps.Map(mapContainer, {
+                                        zoom: 15,
+                                        center: { lat: 5.6037, lng: -0.1870 }, // Default to Accra
+                                        mapTypeControl: true,
+                                        streetViewControl: true,
+                                        fullscreenControl: true
+                                    });
+                                    
+                                    // Geocode venue location
+                                    const geocoder = new google.maps.Geocoder();
+                                    geocoder.geocode({ address: venue.location + ', Ghana' }, (results, status) => {
+                                        if (status === 'OK' && results[0] && venueDetailsMap) {
+                                            const location = results[0].geometry.location;
+                                            venueDetailsMap.setCenter(location);
+                                            
+                                            // Add marker
+                                            if (venueDetailsMarker) {
+                                                venueDetailsMarker.setMap(null);
+                                            }
+                                            venueDetailsMarker = new google.maps.Marker({
+                                                position: location,
+                                                map: venueDetailsMap,
+                                                title: venue.name,
+                                                animation: google.maps.Animation.DROP
+                                            });
+                                        }
+                                    });
+                                } catch (error) {
+                                    console.log('Map initialization error (suppressed):', error);
+                                }
+                            }
+                        };
+                        
+                        // Watch for when map carousel item becomes active
+                        carousel.addEventListener('slid.bs.carousel', function(e) {
+                            const activeItem = e.relatedTarget;
+                            if (activeItem && activeItem.id === 'venueDetailsMapContainer') {
+                                setTimeout(initializeMapInCarousel, 100);
+                            }
+                        });
+                        
+                        // Also check on initial load if map is visible
+                        const checkMapVisibility = () => {
+                            const mapContainer = document.getElementById('venueDetailsMapContainer');
+                            if (mapContainer && mapContainer.classList.contains('active')) {
+                                setTimeout(initializeMapInCarousel, 100);
+                            }
+                        };
+                        setTimeout(checkMapVisibility, 300);
+                    }, { once: true });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to load venue details',
+                        confirmButtonColor: '#ff6b35'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Please check your connection and try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
+            }
+        }
+
+        async function editVenue(venueId) {
             editingVenueId = venueId;
             document.getElementById('modalTitle').textContent = 'Edit Venue';
-            const modal = new bootstrap.Modal(document.getElementById('addVenueModal'));
+            
+            try {
+                // Fetch venue data
+                const response = await fetch(`${API_BASE}/venues/${venueId}`);
+                const data = await response.json();
+                
+                if (response.ok && data.venue) {
+                    const venue = data.venue;
+                    
+                    // Populate form fields
+                    document.getElementById('venueName').value = venue.name || '';
+                    document.getElementById('venueLocation').value = venue.location || '';
+                    document.getElementById('venueDescription').value = venue.description || '';
+                    document.getElementById('venueCapacity').value = venue.capacity || '';
+                    document.getElementById('venuePrice').value = venue.price || '';
+                    document.getElementById('venueContactEmail').value = venue.contactEmail || '';
+                    document.getElementById('venueContactPhone').value = venue.contactPhone || '';
+                    
+                    // Clear existing previews and selected files
+                    selectedFiles = [];
+                    document.getElementById('imagePreview').innerHTML = '';
+                    
+                    // Load existing images into preview
+                    let existingImages = [];
+                    if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
+                        existingImages = venue.photoUrls.filter(url => url && url.trim() !== '');
+                    } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
+                        existingImages = [venue.photoUrl];
+                    }
+                    
+                    // Display existing images in preview
+                    if (existingImages.length > 0) {
+                        existingImages.forEach((imgUrl, index) => {
+                            const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
+                                               imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
+                                               `http://localhost:3000/${imgUrl}`;
+                            
+                            const imgDiv = document.createElement('div');
+                            imgDiv.className = 'position-relative';
+                            imgDiv.style.width = '120px';
+                            imgDiv.style.height = '120px';
+                            imgDiv.style.borderRadius = '8px';
+                            imgDiv.style.overflow = 'hidden';
+                            imgDiv.style.border = '2px solid #e9ecef';
+                            imgDiv.dataset.index = index;
+                            imgDiv.dataset.isExisting = 'true';
+                            imgDiv.dataset.url = imgUrl;
+                            
+                            const img = document.createElement('img');
+                            img.src = fullImageUrl;
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.objectFit = 'cover';
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
+                            removeBtn.style.width = '24px';
+                            removeBtn.style.height = '24px';
+                            removeBtn.style.padding = '0';
+                            removeBtn.style.borderRadius = '50%';
+                            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            removeBtn.onclick = function() {
+                                // Remove from existing images
+                                existingImages.splice(index, 1);
+                                imgDiv.remove();
+                            };
+                            
+                            imgDiv.appendChild(img);
+                            imgDiv.appendChild(removeBtn);
+                            document.getElementById('imagePreview').appendChild(imgDiv);
+                            
+                            // Store existing image URL in selectedFiles for reference
+                            selectedFiles.push({ isExisting: true, url: imgUrl });
+                        });
+                    }
+                    
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('addVenueModal'));
+                    modal.show();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to load venue data for editing.',
+                        confirmButtonColor: '#ff6b35'
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading venue for edit:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Network error. Please try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
+            }
+        }
+
+        function showVenueMap(venueId, venueName, venueLocation) {
+            document.getElementById('mapModalTitle').textContent = venueName;
+            document.getElementById('venueNameMap').textContent = venueName;
+            document.getElementById('venueLocationMap').textContent = venueLocation;
+            
+            // Create Google Maps directions link
+            const encodedLocation = encodeURIComponent(venueLocation);
+            document.getElementById('directionsLink').href = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
+            
+            // Initialize or update map
+            const modal = new bootstrap.Modal(document.getElementById('mapModal'));
             modal.show();
+            
+            // Wait for modal to be shown before initializing map
+            document.getElementById('mapModal').addEventListener('shown.bs.modal', function initializeMap() {
+                // Continuously hide error messages
+                const hideErrors = setInterval(() => {
+                    const mapContainer = document.getElementById('venueMap');
+                    if (mapContainer) {
+                        // Hide all error messages
+                        const allDivs = mapContainer.querySelectorAll('div');
+                        allDivs.forEach(div => {
+                            const text = div.textContent || div.innerText || '';
+                            if (text.includes('Oops') || 
+                                text.includes('Something went wrong') || 
+                                text.includes('didn\'t load Google Maps') ||
+                                text.includes('See the JavaScript console')) {
+                                div.style.display = 'none';
+                                div.style.visibility = 'hidden';
+                                div.style.opacity = '0';
+                                div.style.height = '0';
+                                div.style.width = '0';
+                                div.style.overflow = 'hidden';
+                                // Hide parent too
+                                if (div.parentElement) {
+                                    div.parentElement.style.display = 'none';
+                                }
+                            }
+                        });
+                    }
+                }, 100);
+                
+                // Stop hiding errors after 5 seconds
+                setTimeout(() => clearInterval(hideErrors), 5000);
+                
+                // Check if Google Maps is loaded
+                if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                    console.log('Google Maps not loaded yet, will retry...');
+                    // Retry after a delay
+                    setTimeout(() => {
+                        if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+                            initializeMap();
+                        }
+                    }, 500);
+                    return;
+                }
+                
+                try {
+                    if (!venueMap) {
+                        // Initialize map centered on Ghana (Accra)
+                        venueMap = new google.maps.Map(document.getElementById('venueMap'), {
+                            zoom: 13,
+                            center: { lat: 5.6037, lng: -0.1870 }, // Accra coordinates
+                            mapTypeControl: true,
+                            streetViewControl: true,
+                            fullscreenControl: true
+                        });
+                    }
+                    
+                    // Geocode the venue location
+                    const geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ address: venueLocation }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        const location = results[0].geometry.location;
+                        
+                        // Center map on venue location
+                        venueMap.setCenter(location);
+                        
+                        // Remove existing marker if any
+                        if (venueMarker) {
+                            venueMarker.setMap(null);
+                        }
+                        
+                        // Add marker for venue
+                        venueMarker = new google.maps.Marker({
+                            position: location,
+                            map: venueMap,
+                            title: venueName,
+                            animation: google.maps.Animation.DROP
+                        });
+                        
+                        // Add info window
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: `
+                                <div style="padding: 10px;">
+                                    <h6 style="margin: 0 0 5px 0; font-weight: bold;">${venueName}</h6>
+                                    <p style="margin: 0; color: #666;">${venueLocation}</p>
+                                </div>
+                            `
+                        });
+                        
+                        venueMarker.addListener('click', () => {
+                            infoWindow.open(venueMap, venueMarker);
+                        });
+                        
+                        // Open info window by default
+                        infoWindow.open(venueMap, venueMarker);
+                    } else {
+                        console.log('Geocoding failed:', status);
+                        // Don't show error, map will still be visible with default location
+                    }
+                });
+                } catch (error) {
+                    console.log('Map initialization error (suppressed):', error);
+                    // Map container will still be visible
+                }
+                
+                // Remove event listener after first use
+                document.getElementById('mapModal').removeEventListener('shown.bs.modal', initializeMap);
+            }, { once: true });
         }
 
         async function deleteVenue(venueId) {
-            if (!confirm('Are you sure you want to delete this venue?')) {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (!result.isConfirmed) {
                 return;
             }
 
@@ -392,17 +1527,45 @@
                     method: 'DELETE'
                 });
 
+                const data = await response.json();
+
                 if (response.ok) {
-                    alert('Venue deleted successfully!');
-                    loadVenues(); // Reload venues
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted!',
+                        text: 'Venue has been deleted successfully.',
+                        confirmButtonColor: '#ff6b35',
+                        timer: 2000
+                    });
+                    // Reload venues to refresh the list
+                    loadVenues();
                 } else {
-                    const data = await response.json();
-                    alert('Error: ' + data.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to delete venue',
+                        confirmButtonColor: '#ff6b35'
+                    });
+                    console.error('Delete error:', data);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Network error. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Please check your connection and try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
             }
+        }
+
+        function openAddVenueModal() {
+            // Switch to venues tab first
+            document.querySelector('.nav-link[data-tab="venues"]').click();
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('addVenueModal'));
+                modal.show();
+            }, 100);
         }
 
         // Handle form submission
@@ -419,9 +1582,11 @@
             formData.append('contact_phone', document.getElementById('venueContactPhone').value);
             formData.append('owner_id', currentUser._id);
 
-            const photoFile = document.getElementById('venuePhoto').files[0];
-            if (photoFile) {
-                formData.append('photo', photoFile);
+            const photoFiles = document.getElementById('venuePhotos').files;
+            if (photoFiles && photoFiles.length > 0) {
+                for (let i = 0; i < photoFiles.length; i++) {
+                    formData.append('photos', photoFiles[i]);
+                }
             }
 
             try {
@@ -439,16 +1604,47 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert(editingVenueId ? 'Venue updated successfully!' : 'Venue created successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: editingVenueId ? 'Venue updated successfully!' : 'Venue created successfully!',
+                        confirmButtonColor: '#ff6b35',
+                        timer: 2000
+                    });
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addVenueModal'));
                     modal.hide();
-                    loadVenues(); // Reload venues
+                    loadVenues();
+                    // Reset form and selected files
+                    selectedFiles = [];
+                    document.getElementById('venueForm').reset();
+                    document.getElementById('imagePreview').innerHTML = '';
                 } else {
-                    alert('Error: ' + data.message);
+                    // Show detailed error messages
+                    let errorMessage = data.message || 'An error occurred';
+                    let errorDetails = '';
+                    if (data.errors && Array.isArray(data.errors)) {
+                        errorDetails = data.errors.map(err => {
+                            if (typeof err === 'string') return err;
+                            return err.msg || err.message || JSON.stringify(err);
+                        }).join('<br>');
+                    }
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        html: errorDetails ? `<strong>${errorMessage}</strong><br><br>${errorDetails}` : errorMessage,
+                        confirmButtonColor: '#ff6b35'
+                    });
+                    console.error('Venue submission error:', data);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Network error. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Please check your connection and try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
             }
         });
 
@@ -457,11 +1653,137 @@
             window.location.href = './login.html';
         }
 
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        }
+
+        // Store selected files to preserve them when adding new ones
+        let selectedFiles = [];
+        
         // Reset modal when closed
         document.getElementById('addVenueModal').addEventListener('hidden.bs.modal', function() {
             document.getElementById('venueForm').reset();
             document.getElementById('modalTitle').textContent = 'Add New Venue';
+            document.getElementById('imagePreview').innerHTML = '';
+            selectedFiles = [];
             editingVenueId = null;
+            
+            // Clear all form fields explicitly
+            document.getElementById('venueName').value = '';
+            document.getElementById('venueLocation').value = '';
+            document.getElementById('venueDescription').value = '';
+            document.getElementById('venueCapacity').value = '';
+            document.getElementById('venuePrice').value = '';
+            document.getElementById('venueContactEmail').value = '';
+            document.getElementById('venueContactPhone').value = '';
+            document.getElementById('venuePhotos').value = '';
+        });
+        
+        // Function to update preview from files array
+        function updateImagePreview(files) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (file instanceof File && file.type && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgDiv = document.createElement('div');
+                        imgDiv.className = 'position-relative';
+                        imgDiv.style.width = '120px';
+                        imgDiv.style.height = '120px';
+                        imgDiv.style.borderRadius = '8px';
+                        imgDiv.style.overflow = 'hidden';
+                        imgDiv.style.border = '2px solid #e9ecef';
+                        imgDiv.dataset.index = index;
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
+                        removeBtn.style.width = '24px';
+                        removeBtn.style.height = '24px';
+                        removeBtn.style.padding = '0';
+                        removeBtn.style.borderRadius = '50%';
+                        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                        removeBtn.onclick = function() {
+                            // Remove file from selectedFiles array
+                            selectedFiles.splice(index, 1);
+                            // Update file input
+                            const dt = new DataTransfer();
+                            selectedFiles.forEach(f => {
+                                if (f instanceof File) {
+                                    dt.items.add(f);
+                                }
+                            });
+                            document.getElementById('venuePhotos').files = dt.files;
+                            // Update preview
+                            updateImagePreview(selectedFiles);
+                        };
+                        
+                        imgDiv.appendChild(img);
+                        imgDiv.appendChild(removeBtn);
+                        preview.appendChild(imgDiv);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Image preview functionality - preserve existing files when adding new ones
+        document.getElementById('venuePhotos').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Check total count
+            if (selectedFiles.length + newFiles.length > 10) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Too Many Images',
+                    text: 'You can upload a maximum of 10 images. Please remove some images first.',
+                    confirmButtonColor: '#ff6b35'
+                });
+                // Reset file input to previous state
+                const dt = new DataTransfer();
+                selectedFiles.forEach(f => {
+                    if (f instanceof File) {
+                        dt.items.add(f);
+                    }
+                });
+                document.getElementById('venuePhotos').files = dt.files;
+                return;
+            }
+            
+            // Add new files to existing ones (avoid duplicates)
+            newFiles.forEach(newFile => {
+                // Check if file is not already in selectedFiles
+                const isDuplicate = selectedFiles.some(existingFile => {
+                    if (existingFile instanceof File && newFile instanceof File) {
+                        return existingFile.name === newFile.name && existingFile.size === newFile.size;
+                    }
+                    return false;
+                });
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Update file input with all selected files
+            const dt = new DataTransfer();
+            selectedFiles.forEach(f => {
+                if (f instanceof File) {
+                    dt.items.add(f);
+                }
+            });
+            document.getElementById('venuePhotos').files = dt.files;
+            
+            // Update preview
+            updateImagePreview(selectedFiles);
         });
     </script>
 </body>

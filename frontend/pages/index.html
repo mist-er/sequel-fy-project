@@ -10,191 +10,1598 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../styles/custom.css?v=8">
+    <link rel="stylesheet" href="../styles/custom.css?v=9">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Header Styles */
+        .main-header {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        
+        .logo i {
+            color: #ff6b35;
+        }
+        
+        /* Navbar Search */
+        .navbar-search {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 8px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-search:focus-within {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 107, 53, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+        
+        .navbar-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+        
+        .navbar-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .navbar-search-select {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 14px;
+            padding: 5px 25px 5px 10px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+        
+        .navbar-search-select option {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .navbar-search-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .navbar-search-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-1px);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ff6b35;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        
+        .header-actions a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .btn-add-listing {
+            background: #ff6b35;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add-listing:hover {
+            background: #e55a2b;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+        
+        .mobile-menu-toggle.active {
+            background: rgba(255, 107, 53, 0.2);
+            border-color: #ff6b35;
+        }
+        
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Mobile Menu Sidebar */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 350px;
+            height: 100%;
+            background: #2c3e50;
+            z-index: 9999;
+            overflow-y: auto;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu-header {
+            padding: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-menu-header .logo {
+            font-size: 22px;
+        }
+        
+        .mobile-menu-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-close:hover {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+        }
+        
+        .mobile-menu-content {
+            padding: 20px;
+        }
+        
+        .mobile-menu-search {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu-search .navbar-search {
+            width: 100%;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-direction: column;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .mobile-menu-search .navbar-search-input,
+        .mobile-menu-search .navbar-search-select {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .mobile-menu-search .navbar-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .mobile-menu-search .navbar-search-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+        
+        .mobile-menu-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+        
+        .mobile-menu-nav li {
+            margin-bottom: 5px;
+        }
+        
+        .mobile-menu-nav a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-nav a:hover,
+        .mobile-menu-nav a.active {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+            padding-left: 25px;
+        }
+        
+        .mobile-menu-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu-actions a {
+            display: block;
+            padding: 15px 20px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-actions a:first-child {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-menu-actions a:first-child:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        
+        .mobile-menu-actions a:last-child {
+            background: #ff6b35;
+        }
+        
+        .mobile-menu-actions a:last-child:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(44, 62, 80, 0.2), rgba(44, 62, 80, 0.3)), 
+                        url('../uploads/image.png');
+            background-size: cover;
+            background-position: 50% 0%;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 0 60px 0;
+            position: relative;
+        }
+        
+        .hero-content {
+            text-align: center;
+            color: white;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        
+        .hero-title {
+            font-size: 96px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: heroTitleFade 4s ease-in-out infinite;
+        }
+        
+        @keyframes heroTitleFade {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        
+        .hero-subtitle {
+            font-size: 22px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: heroSubtitleAnimation 1.5s ease-out 0.3s both;
+        }
+        
+        @keyframes heroSubtitleAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Hero CTA Button */
+        .hero-cta {
+            animation: heroCTAAnimation 1.8s ease-out 0.6s both;
+        }
+        
+        .hero-cta .btn-hero-primary {
+            animation: buttonPulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .hero-cta .btn-hero-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: inherit;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: buttonGlow 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes buttonPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6);
+            }
+        }
+        
+        @keyframes buttonGlow {
+            0%, 100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+        
+        @keyframes heroCTAAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-hero-primary {
+            background: #ff6b35;
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-hero-primary:hover {
+            background: #e55a2b;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
+        }
+        
+        .btn-hero-primary:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Search Section */
+        
+        /* Category Buttons */
+        .category-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .category-btn:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+        }
+        
+        .category-btn.active {
+            background: #ff6b35;
+            border-color: #ff6b35;
+        }
+        
+        .category-btn i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .category-btn span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* Listings Section */
+        .listings-section {
+            background: white;
+            padding: 80px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .section-description {
+            color: #6c757d;
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-description {
+            color: #6c757d;
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Listing Cards */
+        .listing-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            margin-bottom: 30px;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .listing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            border-color: #ff6b35;
+        }
+        
+        .listing-image {
+            position: relative;
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+        
+        .listing-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .listing-card:hover .listing-image::after {
+            opacity: 1;
+        }
+        
+        .listing-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .listing-rating {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #2c3e50;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .listing-rating::before {
+            content: '★';
+            color: #ffc107;
+            font-size: 16px;
+        }
+        
+        .listing-save {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #2c3e50;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .listing-save:hover {
+            background: #ff6b35;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .listing-content {
+            padding: 24px;
+        }
+        
+        .listing-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .listing-subtitle {
+            color: #6c757d;
+            font-size: 15px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Venue Card Styles */
+        .venue-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            background: white;
+        }
+        
+        .venue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+        }
+        
+        .listing-details {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #6c757d;
+            flex-wrap: wrap;
+        }
+        
+        .listing-details span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .listing-details i {
+            color: #ff6b35;
+            font-size: 16px;
+        }
+        
+        .listing-contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .listing-phone {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .show-phone {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .listing-category {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #6c757d;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .listing-action {
+            width: 100%;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .listing-action:hover {
+            background: #e55a2b;
+        }
+        
+        /* How It Works Section */
+        .how-it-works-section {
+            background: #f8f9fa;
+        }
+        
+        .step-card {
+            padding: 30px 20px;
+        }
+        
+        .step-icon-wrapper {
+            margin-bottom: 20px;
+        }
+        
+        .step-icon {
+            display: none;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
+            position: relative;
+            top: 0;
+            right: 0;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+        }
+        
+        .step-description {
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Categories Section */
+        .category-card-clickable {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .category-card-clickable:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+            border: 2px solid #ff6b35;
+        }
+        
+        .category-icon-large {
+            display: none;
+        }
+        
+        .category-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .category-count {
+            color: #6c757d;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        /* Benefits Section */
+        .benefit-card {
+            padding: 30px 20px;
+        }
+        
+        .benefit-icon {
+            display: none;
+        }
+        
+        .benefit-card {
+            padding: 20px;
+        }
+        
+        .benefit-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-description {
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Testimonials Section */
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+        
+        .testimonial-rating {
+            color: #ff6b35;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .testimonial-text {
+            color: #6c757d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .author-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .author-role {
+            font-size: 14px;
+            color: #6c757d;
+            margin: 0;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+        }
+        
+        /* Blog Section */
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .blog-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .blog-content {
+            padding: 25px;
+        }
+        
+        .blog-category {
+            color: #ff6b35;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .blog-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        .blog-excerpt {
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .blog-link {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .blog-link:hover {
+            color: #e55a2b;
+        }
+        
+        /* Enhanced Footer */
+        footer {
+            background: #1a252f;
+        }
+        
+        footer a:hover {
+            color: #ff6b35 !important;
+        }
+        
+        .newsletter-signup {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .newsletter-input {
+            background: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .newsletter-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            width: 100%;
+        }
+        
+        .newsletter-btn:hover {
+            background: #e55a2b;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 12px 0;
+            }
+            
+            .header-content {
+                flex-wrap: nowrap;
+                gap: 15px;
+            }
+            
+            .logo {
+                font-size: 20px;
+                flex: 1;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .navbar-search {
+                display: none;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .header-actions {
+                display: none;
+            }
+            
+            .hero-section {
+                min-height: 100vh;
+                padding: 80px 15px 60px 15px;
+                background-attachment: scroll;
+                background-position: 50% 0%;
+            }
+            
+            .hero-content {
+                padding: 15px;
+            }
+            
+            .hero-title {
+                font-size: 56px;
+                line-height: 1.2;
+                margin-bottom: 15px;
+                letter-spacing: -1px;
+            }
+            
+            .hero-subtitle {
+                font-size: 15px;
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+            
+            .btn-hero-primary {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+            
+            
+            .search-field {
+                border-radius: 12px;
+                padding: 16px 18px;
+                font-size: 16px;
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                width: 100%;
+                min-height: 52px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: all 0.3s ease;
+            }
+            
+            .search-field:first-child {
+                border-radius: 12px;
+            }
+            
+            .search-field::before {
+                display: none !important;
+            }
+            
+            .search-field:focus-within {
+                background: white;
+                border-color: #ff6b35;
+                box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+                transform: translateY(-1px);
+            }
+            
+            .search-field input,
+            .search-field select {
+                background: transparent;
+                border: none;
+                width: 100%;
+                font-size: 16px;
+                padding: 0;
+                color: #2c3e50;
+            }
+            
+            .search-field input::placeholder {
+                color: #6c757d;
+                opacity: 0.8;
+            }
+            
+            .search-field select {
+                color: #2c3e50;
+                cursor: pointer;
+            }
+            
+            .search-field select option {
+                color: #2c3e50;
+            }
+            
+            .search-btn {
+                border-radius: 12px;
+                padding: 16px 24px;
+                font-size: 17px;
+                font-weight: 700;
+                min-height: 52px;
+                width: 100%;
+                box-shadow: 0 4px 15px rgba(255, 107, 53, 0.35);
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                margin-top: 4px;
+            }
+            
+            .search-btn:active {
+                transform: scale(0.98);
+                box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+            }
+            
+            .search-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            }
+            
+            .category-buttons {
+                gap: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .category-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 20px;
+            }
+            
+            .category-btn span {
+                font-size: 11px;
+            }
+            
+            .listings-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .listing-card {
+                margin-bottom: 0;
+            }
+            
+            .listing-image {
+                height: 200px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .section-subtitle {
+                font-size: 15px;
+            }
+            
+            .step-card {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            .step-number {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .step-title {
+                font-size: 18px;
+                margin: 15px 0 8px 0;
+            }
+            
+            .step-description {
+                font-size: 14px;
+            }
+            
+            .category-card-clickable {
+                padding: 20px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .category-name {
+                font-size: 16px;
+            }
+            
+            .benefit-card {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .benefit-title {
+                font-size: 16px;
+            }
+            
+            .benefit-description {
+                font-size: 14px;
+            }
+            
+            .testimonial-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .testimonial-text {
+                font-size: 14px;
+            }
+            
+            .author-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .blog-card {
+                margin-bottom: 20px;
+            }
+            
+            .blog-image {
+                height: 180px;
+            }
+            
+            .blog-content {
+                padding: 20px;
+            }
+            
+            .blog-title {
+                font-size: 16px;
+            }
+            
+            footer {
+                padding: 40px 20px 20px 20px;
+            }
+            
+            footer h5 {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            footer ul {
+                margin-bottom: 20px;
+            }
+            
+            footer li {
+                margin-bottom: 8px;
+            }
+            
+            .newsletter-signup {
+                padding: 15px;
+            }
+            
+            .newsletter-input {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .newsletter-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 42px;
+                letter-spacing: -0.5px;
+            }
+            
+            .hero-subtitle {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+            
+            .btn-hero-primary {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+            
+            .navbar-search {
+                padding: 6px 12px;
+            }
+            
+            .navbar-search-input {
+                font-size: 13px;
+                padding: 4px 8px;
+            }
+            
+            .navbar-search-select {
+                font-size: 12px;
+                padding: 4px 18px 4px 6px;
+                max-width: 100px;
+            }
+            
+            .navbar-search-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .search-field {
+                padding: 14px 16px;
+                min-height: 50px;
+                font-size: 15px;
+            }
+            
+            .search-field::before {
+                display: none;
+            }
+            
+            .search-field input,
+            .search-field select {
+                font-size: 15px;
+            }
+            
+            .search-btn {
+                padding: 14px 20px;
+                font-size: 16px;
+                min-height: 50px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .category-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 18px;
+            }
+            
+            .step-number {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+    <!-- Header -->
+    <header class="main-header">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary fs-3" href="#">
-                <i class="fas fa-building me-2"></i>eFinder
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="./organizer-dashboard.html">Find Venues</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="./owner-dashboard.html">List Venue</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="#contact">Contact</a>
-                    </li>
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-search"></i>
+                    <span>eFinder</span>
+                </a>
+                
+                <!-- Navbar Search -->
+                <div class="navbar-search">
+                    <input type="text" class="navbar-search-input" placeholder="Search venues..." id="searchKeywords">
+                    <select class="navbar-search-select" id="categoryFilter" style="max-width: 150px;">
+                        <option value="">All Types</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="party">Party</option>
+                        <option value="conference">Conference</option>
+                        <option value="restaurant">Restaurant</option>
+                    </select>
+                    <select class="navbar-search-select" id="locationFilter" style="max-width: 130px;">
+                        <option value="">Location</option>
+                        <option value="accra">Accra</option>
+                        <option value="kumasi">Kumasi</option>
+                        <option value="tema">Tema</option>
+                        <option value="takoradi">Takoradi</option>
+                    </select>
+                    <button class="navbar-search-btn" onclick="searchVenues()">
+                        <i class="fas fa-search me-1"></i>Search
+                    </button>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="./organizer-dashboard.html">Find Venues</a></li>
+                    <li><a href="./owner-dashboard.html">List Venue</a></li>
                 </ul>
                 
-                <div class="d-flex align-items-center gap-3">
-                    <a href="./login.html" class="btn btn-outline-primary fw-semibold">Sign In</a>
-                    <a href="./SignUp.html" class="btn btn-primary fw-semibold">
+                <div class="header-actions">
+                    <a href="./login.html">Sign in</a>
+                    <a href="./SignUp.html" class="btn-add-listing">
                         <i class="fas fa-plus me-1"></i>List Your Venue
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="#" class="logo">
+                <i class="fas fa-search"></i>
+                <span>eFinder</span>
+            </a>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-menu-content">
+            <!-- Mobile Search -->
+            <div class="mobile-menu-search">
+                <div class="navbar-search">
+                    <input type="text" class="navbar-search-input" placeholder="Search venues..." id="mobileSearchKeywords">
+                    <select class="navbar-search-select" id="mobileCategoryFilter">
+                        <option value="">All Types</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="party">Party</option>
+                        <option value="conference">Conference</option>
+                        <option value="restaurant">Restaurant</option>
+                    </select>
+                    <select class="navbar-search-select" id="mobileLocationFilter">
+                        <option value="">Location</option>
+                        <option value="accra">Accra</option>
+                        <option value="kumasi">Kumasi</option>
+                        <option value="tema">Tema</option>
+                        <option value="takoradi">Takoradi</option>
+                    </select>
+                    <button class="navbar-search-btn" onclick="searchVenuesMobile()">
+                        <i class="fas fa-search me-1"></i>Search
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Links -->
+            <ul class="mobile-menu-nav">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="./organizer-dashboard.html">Find Venues</a></li>
+                <li><a href="./owner-dashboard.html">List Venue</a></li>
+            </ul>
+            
+            <!-- Mobile Actions -->
+            <div class="mobile-menu-actions">
+                <a href="./login.html">Sign in</a>
+                <a href="./SignUp.html">
+                    <i class="fas fa-plus me-1"></i>List Your Venue
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Find Perfect Event Venues</h1>
+                <p class="hero-subtitle">Discover and book the ideal space for your weddings, corporate events, parties, and celebrations</p>
+                
+                <!-- Get Started Button -->
+                <div class="hero-cta mb-4">
+                    <a href="./SignUp.html" class="btn btn-hero-primary">
+                        <i class="fas fa-rocket me-2"></i>Get Started
+                    </a>
+                </div>
+                
+                <!-- Category Buttons -->
+                <div class="category-buttons">
+                    <a href="#" class="category-btn" data-category="wedding">
+                        <i class="fas fa-heart"></i>
+                        <span>Wedding</span>
+                    </a>
+                    <a href="#" class="category-btn" data-category="corporate">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Corporate</span>
+                    </a>
+                    <a href="#" class="category-btn active" data-category="party">
+                        <i class="fas fa-birthday-cake"></i>
+                        <span>Party</span>
+                    </a>
+                    <a href="#" class="category-btn" data-category="conference">
+                        <i class="fas fa-users"></i>
+                        <span>Conference</span>
+                    </a>
+                    <a href="#" class="category-btn" data-category="restaurant">
+                        <i class="fas fa-utensils"></i>
+                        <span>Restaurant</span>
                     </a>
                 </div>
             </div>
         </div>
-    </nav>
-    <!-- Hero Section -->
-    <section class="hero-section position-relative" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('../uploads/image.png'); background-size: cover; background-position: center; background-attachment: fixed;">
-        <div class="hero-overlay position-absolute w-100 h-100"></div>
-        <div class="container position-relative">
-            <div class="row justify-content-center text-center text-white py-5">
-                <div class="col-lg-8">
-                    <div class="hero-content py-5">
-                        <span class="badge bg-primary mb-3 px-3 py-2">EVENT VENUES</span>
-                        <h1 class="display-4 fw-bold mb-4">Find the Perfect Venue for Your Event</h1>
-                        <p class="lead mb-5">Discover unique spaces for meetings, parties, weddings, and corporate events</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
-
-    <!-- Search Section -->
-    <section class="py-5">
+    
+    <!-- Listings Section -->
+    <section class="listings-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="search-section bg-white rounded-3 p-4 shadow-lg">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="searchInput" placeholder="What are you looking for?">
-                                    <label for="searchInput">What are you looking for?</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <select class="form-select" id="locationSelect">
-                                        <option value="">Choose location</option>
-                                        <option value="accra">Accra</option>
-                                        <option value="kumasi">Kumasi</option>
-                                        <option value="tema">Tema</option>
-                                        <option value="takoradi">Takoradi</option>
-                                    </select>
-                                    <label for="locationSelect">Location</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <select class="form-select" id="categorySelect">
-                                        <option value="">Event type</option>
-                                        <option value="wedding">Wedding</option>
-                                        <option value="corporate">Corporate</option>
-                                        <option value="party">Party</option>
-                                        <option value="conference">Conference</option>
-                                    </select>
-                                    <label for="categorySelect">Event Type</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-search me-2"></i>Search
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-5 fw-bold mb-3">Popular Event Categories</h2>
-                    <p class="lead text-muted">Find the perfect venue for any type of event</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-heart text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Weddings</h5>
-                        <p class="text-muted small">(24 venues)</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-briefcase text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Corporate</h5>
-                        <p class="text-muted small">(18 venues)</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-birthday-cake text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Parties</h5>
-                        <p class="text-muted small">(32 venues)</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-users text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Conferences</h5>
-                        <p class="text-muted small">(15 venues)</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-utensils text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Restaurants</h5>
-                        <p class="text-muted small">(28 venues)</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
-                        <div class="category-icon mb-3">
-                            <i class="fas fa-music text-primary fs-1"></i>
-                        </div>
-                        <h5 class="fw-bold">Entertainment</h5>
-                        <p class="text-muted small">(12 venues)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Venues Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <span class="badge bg-primary mb-3 px-3 py-2">FEATURED VENUES</span>
-                    <h2 class="display-5 fw-bold mb-3">Discover Amazing Event Spaces</h2>
-                    <p class="lead text-muted">Handpicked venues perfect for your next event</p>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">Featured Event Venues</h2>
+                <p class="section-description">
+                    Browse our handpicked selection of premium venues for weddings, corporate events, parties, and special occasions. 
+                    Find the perfect space that matches your vision and budget.
+                </p>
             </div>
             
             <div class="row g-4" id="venuesGrid">
@@ -202,94 +1609,282 @@
             </div>
             
             <div class="text-center mt-5">
-                <a href="./organizer-dashboard.html" class="btn btn-outline-primary btn-lg">
+                <a href="./organizer-dashboard.html" class="btn btn-outline-primary btn-lg" style="padding: 12px 30px; border-radius: 8px; font-weight: 600; border: 2px solid #ff6b35; color: #ff6b35; transition: all 0.3s ease; text-decoration: none;" onmouseover="this.style.background='#ff6b35'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#ff6b35';">
                     View All Venues <i class="fas fa-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>
     </section>
-
+    
     <!-- How It Works Section -->
-    <section class="py-5 bg-light">
+    <section id="how-it-works" class="how-it-works-section py-5 bg-light">
         <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <span class="badge bg-primary mb-3 px-3 py-2">HOW IT WORKS</span>
-                    <h2 class="display-5 fw-bold mb-3">Find Your Perfect Venue in 3 Simple Steps</h2>
-                    <p class="lead text-muted">Making event planning effortless and enjoyable</p>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-description">
+                    Booking your perfect venue is simple and straightforward. Follow these easy steps to get started.
+                </p>
             </div>
             
             <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="step-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                            <i class="fas fa-search fs-3"></i>
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card text-center">
+                        <div class="step-icon-wrapper">
+                            <div class="step-number">1</div>
                         </div>
-                        <h4 class="fw-bold mb-3">1. Search & Discover</h4>
-                        <p class="text-muted">Browse through our curated collection of unique venues. Filter by location, capacity, and event type to find the perfect match.</p>
+                        <h4 class="step-title">Search for Venues</h4>
+                        <p class="step-description">Browse through our extensive collection of venues. Filter by location, capacity, and event type to find your perfect match.</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="step-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                            <i class="fas fa-calendar-check fs-3"></i>
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card text-center">
+                        <div class="step-icon-wrapper">
+                            <div class="step-number">2</div>
                         </div>
-                        <h4 class="fw-bold mb-3">2. Book & Reserve</h4>
-                        <p class="text-muted">Check availability, compare prices, and book your venue instantly. Our secure booking system ensures a smooth reservation process.</p>
+                        <h4 class="step-title">Check Availability</h4>
+                        <p class="step-description">View detailed information, photos, pricing, and real-time availability. Compare multiple venues to make the best choice.</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="step-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                            <i class="fas fa-party-horn fs-3"></i>
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card text-center">
+                        <div class="step-icon-wrapper">
+                            <div class="step-number">3</div>
                         </div>
-                        <h4 class="fw-bold mb-3">3. Host & Enjoy</h4>
-                        <p class="text-muted">Show up and create unforgettable memories. Our venue partners are committed to making your event a success.</p>
+                        <h4 class="step-title">Book Instantly</h4>
+                        <p class="step-description">Secure your venue with our easy booking system. Complete your reservation in minutes with transparent pricing.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card text-center">
+                        <div class="step-icon-wrapper">
+                            <div class="step-number">4</div>
+                        </div>
+                        <h4 class="step-title">Enjoy Your Event</h4>
+                        <p class="step-description">Show up and create unforgettable memories. Our venue partners ensure your event is a success.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- CTA Section -->
-    <section class="py-5 bg-primary text-white">
+    
+    <!-- Categories Section -->
+    <section class="categories-section py-5">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h2 class="display-6 fw-bold mb-3">Ready to Host Your Next Event?</h2>
-                    <p class="lead mb-0">Join thousands of event organizers who trust eFinder for their venue needs.</p>
+            <div class="section-header">
+                <h2 class="section-title">Browse by Category</h2>
+                <p class="section-description">
+                    Explore venues tailored for different types of events. Find the perfect space for your occasion.
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('wedding')">
+                        <h5 class="category-name">Wedding</h5>
+                        <p class="category-count">24 venues</p>
+                    </div>
                 </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a href="./SignUp.html" class="btn btn-light btn-lg">
-                        Get Started Today <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('corporate')">
+                        <h5 class="category-name">Corporate</h5>
+                        <p class="category-count">18 venues</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('party')">
+                        <h5 class="category-name">Party</h5>
+                        <p class="category-count">32 venues</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('conference')">
+                        <h5 class="category-name">Conference</h5>
+                        <p class="category-count">15 venues</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('restaurant')">
+                        <h5 class="category-name">Restaurant</h5>
+                        <p class="category-count">28 venues</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="category-card-clickable" onclick="filterByCategory('outdoor')">
+                        <h5 class="category-name">Outdoor</h5>
+                        <p class="category-count">12 venues</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
+    <!-- Benefits Section -->
+    <section class="benefits-section py-5 bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose eFinder</h2>
+                <p class="section-description">
+                    We make venue booking simple, secure, and stress-free for event organizers and venue owners.
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="benefit-card text-center">
+                        <h5 class="benefit-title">Verified Venues</h5>
+                        <p class="benefit-description">All venues are verified and quality-checked to ensure the best experience.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="benefit-card text-center">
+                        <h5 class="benefit-title">Easy Booking & Payment</h5>
+                        <p class="benefit-description">Simple booking process with secure payment options for your peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="benefit-card text-center">
+                        <h5 class="benefit-title">Transparent Pricing</h5>
+                        <p class="benefit-description">No hidden fees. See all costs upfront with clear, transparent pricing.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="benefit-card text-center">
+                        <h5 class="benefit-title">24/7 Support</h5>
+                        <p class="benefit-description">Round-the-clock customer support to help you every step of the way.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Our Customers Say</h2>
+                <p class="section-description">
+                    Don't just take our word for it. See what event organizers are saying about eFinder.
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">5.0 Rating</div>
+                        <p class="testimonial-text">"eFinder made finding our wedding venue so easy! We found the perfect location within days and the booking process was seamless."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">A</div>
+                            <div class="author-info">
+                                <h6 class="author-name">Ama Mensah</h6>
+                                <p class="author-role">Wedding Organizer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">5.0 Rating</div>
+                        <p class="testimonial-text">"As a corporate event planner, I use eFinder for all my venue bookings. The platform is intuitive and saves me so much time!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">K</div>
+                            <div class="author-info">
+                                <h6 class="author-name">Kwame Asante</h6>
+                                <p class="author-role">Corporate Event Planner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">5.0 Rating</div>
+                        <p class="testimonial-text">"The transparency in pricing and availability made it easy to compare venues. Highly recommend eFinder for any event!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">E</div>
+                            <div class="author-info">
+                                <h6 class="author-name">Efua Osei</h6>
+                                <p class="author-role">Party Organizer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Blog / Tips Section -->
+    <section class="blog-section py-5 bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Event Planning Tips & Inspiration</h2>
+                <p class="section-description">
+                    Get expert advice and creative ideas to make your event unforgettable.
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card">
+                        <div class="blog-image" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="blog-content">
+                            <span class="blog-category">Planning Guide</span>
+                            <h5 class="blog-title">10 Tips for Choosing the Perfect Wedding Venue</h5>
+                            <p class="blog-excerpt">Discover essential factors to consider when selecting your dream wedding venue...</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card">
+                        <div class="blog-image" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="blog-content">
+                            <span class="blog-category">Decor Ideas</span>
+                            <h5 class="blog-title">Budget-Friendly Event Decoration Ideas</h5>
+                            <p class="blog-excerpt">Transform any venue into a stunning space without breaking the bank...</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card">
+                        <div class="blog-image" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="blog-content">
+                            <span class="blog-category">Corporate Events</span>
+                            <h5 class="blog-title">How to Plan a Successful Corporate Event</h5>
+                            <p class="blog-excerpt">Expert tips for organizing professional corporate gatherings that impress...</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Footer -->
     <footer class="bg-dark text-white py-5">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4">
                     <h5 class="fw-bold mb-3">
-                        <i class="fas fa-building me-2"></i>eFinder
+                        <i class="fas fa-building me-2" style="color: #ff6b35;"></i>eFinder
                     </h5>
                     <p class="text-muted">Connecting event organizers with the perfect venues. Making every event memorable.</p>
-                    <div class="d-flex gap-3">
+                    <div class="d-flex gap-3 mt-3">
                         <a href="#" class="text-muted"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-muted"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="text-muted"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="text-muted"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <h6 class="fw-bold mb-2">Subscribe to Newsletter</h6>
+                        <input type="email" class="newsletter-input" placeholder="Your email address">
+                        <button class="newsletter-btn">Subscribe</button>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <h6 class="fw-bold mb-3">For Organizers</h6>
                     <ul class="list-unstyled">
                         <li><a href="./organizer-dashboard.html" class="text-muted text-decoration-none">Find Venues</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">How It Works</a></li>
+                        <li><a href="#how-it-works" class="text-muted text-decoration-none">How It Works</a></li>
                         <li><a href="#" class="text-muted text-decoration-none">Pricing</a></li>
                         <li><a href="#" class="text-muted text-decoration-none">Support</a></li>
                     </ul>
@@ -306,10 +1901,10 @@
                 <div class="col-lg-2">
                     <h6 class="fw-bold mb-3">Company</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                        <li><a href="#about" class="text-muted text-decoration-none">About Us</a></li>
                         <li><a href="#" class="text-muted text-decoration-none">Careers</a></li>
                         <li><a href="#" class="text-muted text-decoration-none">Press</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                        <li><a href="#contact" class="text-muted text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2">
@@ -321,26 +1916,356 @@
                     </ul>
                 </div>
             </div>
-            <hr class="my-4">
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <p class="text-muted mb-0">&copy; 2024 eFinder. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="text-muted mb-0">Made with <i class="fas fa-heart text-danger"></i> in Ghana</p>
+                    <p class="text-muted mb-0">Made with <i class="fas fa-heart" style="color: #ff6b35;"></i> in Ghana</p>
                 </div>
             </div>
         </div>
     </footer>
-
-    <!-- Scroll to Top Button -->
-    <button class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle" id="scrollToTop" style="width: 50px; height: 50px; display: none; z-index: 1000;">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
-    <script src="../scripts/homepage_script.js"></script>
+    
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        
+        // Load venues on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVenues();
+            setupCategoryButtons();
+            initTypingAnimation();
+            
+            // Search event listeners
+            const searchKeywords = document.getElementById('searchKeywords');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const locationFilter = document.getElementById('locationFilter');
+            
+            if (searchKeywords) {
+                searchKeywords.addEventListener('input', searchVenues);
+            }
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', searchVenues);
+            }
+            if (locationFilter) {
+                locationFilter.addEventListener('change', searchVenues);
+            }
+            
+            // Mobile Menu Toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            
+            if (mobileMenuToggle && mobileMenu && mobileMenuOverlay && mobileMenuClose) {
+                function openMobileMenu() {
+                    if (mobileMenu) mobileMenu.classList.add('active');
+                    if (mobileMenuOverlay) mobileMenuOverlay.classList.add('active');
+                    if (mobileMenuToggle) mobileMenuToggle.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeMobileMenu() {
+                    if (mobileMenu) mobileMenu.classList.remove('active');
+                    if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                    if (mobileMenuToggle) mobileMenuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                mobileMenuToggle.addEventListener('click', openMobileMenu);
+                mobileMenuClose.addEventListener('click', closeMobileMenu);
+                mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            
+                // Close menu when clicking on a link
+                const mobileMenuLinks = document.querySelectorAll('.mobile-menu-nav a, .mobile-menu-actions a');
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        setTimeout(closeMobileMenu, 300);
+                    });
+                });
+                
+                // Sync mobile search with main search
+                const mobileSearchKeywords = document.getElementById('mobileSearchKeywords');
+                const mobileCategoryFilter = document.getElementById('mobileCategoryFilter');
+                const mobileLocationFilter = document.getElementById('mobileLocationFilter');
+                
+                if (mobileSearchKeywords) {
+                    mobileSearchKeywords.addEventListener('input', function() {
+                        document.getElementById('searchKeywords').value = this.value;
+                        searchVenues();
+                    });
+                }
+                
+                if (mobileCategoryFilter) {
+                    mobileCategoryFilter.addEventListener('change', function() {
+                        document.getElementById('categoryFilter').value = this.value;
+                        searchVenues();
+                    });
+                }
+                
+                if (mobileLocationFilter) {
+                    mobileLocationFilter.addEventListener('change', function() {
+                        document.getElementById('locationFilter').value = this.value;
+                        searchVenues();
+                    });
+                }
+            }
+        });
+        
+        // Fade Animation for Hero Title (already handled by CSS)
+        function initTypingAnimation() {
+            // Animation is handled by CSS fade in/out
+        }
+        
+        async function loadVenues() {
+            try {
+                // Fetch venues - backend already sorts by createdAt descending (newest first)
+                const response = await fetch(`${API_BASE}/venues?limit=50`);
+                const data = await response.json();
+                
+                if (response.ok && data.venues && Array.isArray(data.venues)) {
+                    // Filter only active venues (exclude only if explicitly false)
+                    let activeVenues = data.venues.filter(venue => {
+                        // Include venues where isActive is true or undefined (default to active)
+                        return venue.isActive !== false;
+                    });
+                    
+                    // Sort by creation date (newest first) - backend should already do this, but ensure it
+                    const sortedVenues = activeVenues.sort((a, b) => {
+                        // Try multiple date field names
+                        const dateA = new Date(a.createdAt || a.created_at || a.created || 0);
+                        const dateB = new Date(b.createdAt || b.created_at || b.created || 0);
+                        
+                        // If dates are invalid, use timestamp comparison
+                        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                            return (b._id || '').localeCompare(a._id || ''); // Fallback to ID comparison
+                        }
+                        
+                        return dateB - dateA; // Descending order (newest first)
+                    });
+                    
+                    // Get only the 4 newest venues
+                    const latestVenues = sortedVenues.slice(0, 4);
+                    
+                    console.log('Featured venues loaded:', latestVenues.length, 'venues');
+                    displayVenues(latestVenues);
+                } else {
+                    throw new Error(data.message || 'Failed to load venues');
+                }
+            } catch (error) {
+                console.error('Error loading venues:', error);
+                // Show error message in the grid
+                const venuesGrid = document.getElementById('venuesGrid');
+                if (venuesGrid) {
+                    venuesGrid.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">Unable to load venues. Please try again later.</p></div>';
+                }
+            }
+        }
+        
+        function displayVenues(venues) {
+            const venuesGrid = document.getElementById('venuesGrid');
+            
+            if (venues.length === 0) {
+                venuesGrid.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">No venues available at the moment.</p></div>';
+                return;
+            }
+            
+            venuesGrid.innerHTML = venues.map((venue, venueIndex) => {
+                // Get all images
+                let images = [];
+                if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
+                    images = venue.photoUrls.filter(url => url && url.trim() !== '');
+                } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
+                    images = [venue.photoUrl];
+                }
+                
+                // Default placeholder if no images
+                if (images.length === 0) {
+                    images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'];
+                }
+                
+                const hasMultipleImages = images.length > 1;
+                const carouselId = `homepageVenueCarousel${venueIndex}`;
+                
+                // Build image HTML with carousel for multiple images
+                let imageHtml = '';
+                if (hasMultipleImages) {
+                    // Carousel for multiple images
+                    imageHtml = `
+                        <div id="${carouselId}" class="carousel slide" data-bs-ride="false" style="height: 200px; position: relative;">
+                            <div class="carousel-inner" style="height: 100%; border-radius: 12px 12px 0 0; overflow: hidden;">
+                                ${images.map((imgUrl, imgIndex) => {
+                                    const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
+                                                       imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
+                                                       `http://localhost:3000/${imgUrl}`;
+                                    return `
+                                        <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}" style="height: 200px;">
+                                            <img src="${fullImageUrl}" class="d-block w-100" style="height: 100%; object-fit: cover;" alt="${venue.name} - Image ${imgIndex + 1}" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'">
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Single image (no carousel)
+                    const fullImageUrl = images[0].startsWith('http') ? images[0] : 
+                                       images[0].startsWith('/') ? `http://localhost:3000${images[0]}` : 
+                                       `http://localhost:3000/${images[0]}`;
+                    imageHtml = `
+                        <div style="background-image: url('${fullImageUrl}'); height: 200px; background-size: cover; background-position: center; border-radius: 12px 12px 0 0; position: relative;">
+                        </div>
+                    `;
+                }
+                
+                return `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="venue-card" style="border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; height: 100%; display: flex; flex-direction: column;">
+                        <div class="position-relative" style="height: 200px; overflow: hidden;">
+                            ${imageHtml}
+                            <div class="position-absolute top-0 end-0 m-2" style="z-index: 5;">
+                                <span class="badge ${venue.isActive ? 'bg-success' : 'bg-secondary'}">${venue.isActive ? 'Available' : 'Unavailable'}</span>
+                            </div>
+                            <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 5;">
+                                <span class="badge bg-primary">GHS ${venue.price}</span>
+                            </div>
+                        </div>
+                        <div class="card-body" style="flex: 1; display: flex; flex-direction: column; padding: 20px;">
+                            <h5 class="card-title" style="font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #2c3e50;">${venue.name}</h5>
+                            <p class="card-text text-muted" style="font-size: 14px; margin-bottom: 15px; flex: 1;">${venue.description || 'Perfect venue for your special events.'}</p>
+                            <div class="row g-2 mb-3">
+                                <div class="col-12">
+                                    <small class="text-muted" style="font-size: 13px;">
+                                        <i class="fas fa-map-pin me-1" style="color: #ff6b35;"></i>${venue.location}
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted" style="font-size: 13px;">
+                                        <i class="fas fa-users me-1" style="color: #ff6b35;"></i>${venue.capacity} guests
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 mt-auto flex-wrap">
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.location)}" target="_blank" class="btn btn-sm" title="View Location" style="background: #17a2b8; color: white; border: none; flex: 1; min-width: 100px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 6px; font-size: 13px;">
+                                    <i class="fas fa-map-pin me-1"></i>Map
+                                </a>
+                                <button class="btn btn-sm" onclick="window.location.href='./organizer-dashboard.html'" title="View Details" style="background: #28a745; color: white; border: none; flex: 1; min-width: 100px; padding: 8px 12px; border-radius: 6px; font-size: 13px;">
+                                    <i class="fas fa-eye me-1"></i>Details
+                                </button>
+                                <button class="btn btn-sm" onclick="window.location.href='./SignUp.html'" ${!venue.isActive ? 'disabled' : ''} title="Book Venue" style="background: #ffc107; color: #000; border: none; flex: 1; min-width: 100px; font-weight: 600; padding: 8px 12px; border-radius: 6px; font-size: 13px; ${!venue.isActive ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+                                    <i class="fas fa-calendar-plus me-1"></i>Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+        
+        function setupCategoryButtons() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update category filter
+                    document.getElementById('categoryFilter').value = category;
+                    searchVenues();
+                });
+            });
+        }
+        
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            searchVenues();
+            // Scroll to venues section
+            document.querySelector('.listings-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        async function searchVenues() {
+            const keywords = document.getElementById('searchKeywords').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const location = document.getElementById('locationFilter').value.toLowerCase();
+            
+            try {
+                const response = await fetch(`${API_BASE}/venues`);
+                const data = await response.json();
+                
+                if (response.ok && data.venues) {
+                    let filteredVenues = data.venues;
+                    
+                    // Filter by keywords
+                    if (keywords) {
+                        filteredVenues = filteredVenues.filter(venue => 
+                            venue.name.toLowerCase().includes(keywords) ||
+                            (venue.description && venue.description.toLowerCase().includes(keywords))
+                        );
+                    }
+                    
+                    // Filter by location
+                    if (location) {
+                        filteredVenues = filteredVenues.filter(venue => 
+                            venue.location.toLowerCase().includes(location)
+                        );
+                    }
+                    
+                    displayVenues(filteredVenues);
+                }
+            } catch (error) {
+                console.error('Error searching venues:', error);
+            }
+        }
+        
+        
+        // Mobile search function
+        function searchVenuesMobile() {
+            const mobileKeywords = document.getElementById('mobileSearchKeywords').value;
+            const mobileCategory = document.getElementById('mobileCategoryFilter').value;
+            const mobileLocation = document.getElementById('mobileLocationFilter').value;
+            
+            // Sync with main search fields
+            document.getElementById('searchKeywords').value = mobileKeywords;
+            document.getElementById('categoryFilter').value = mobileCategory;
+            document.getElementById('locationFilter').value = mobileLocation;
+            
+            // Perform search
+            searchVenues();
+            
+            // Close mobile menu
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            mobileMenuToggle.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Scroll to venues section
+            document.querySelector('.listings-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Quick map view function for homepage
+        function showVenueMapQuick(venueName, venueLocation) {
+            // Open Google Maps in new tab
+            const encodedLocation = encodeURIComponent(venueLocation);
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`, '_blank');
+        }
+        
+    </script>
 </body>
 </html>
