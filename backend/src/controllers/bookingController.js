@@ -81,7 +81,8 @@ class BookingController {
         startTime: start_time,
         endTime: end_time,
         totalCost: totalCost,
-        notes: notes || ''
+        notes: notes || '',
+        paymentStatus: 'unpaid'
       };
 
       // Create booking
@@ -110,7 +111,7 @@ class BookingController {
       });
     } catch (error) {
       console.error('Error creating booking:', error);
-      
+
       // Handle validation errors
       if (error.name === 'ValidationError') {
         const errors = Object.values(error.errors).map(err => err.message);
@@ -140,7 +141,7 @@ class BookingController {
       } = req.query;
 
       const query = {};
-      
+
       if (venue_id) query.venue = venue_id;
       if (organizer_id) query.organizer = organizer_id;
       if (status) query.status = status;
@@ -288,10 +289,10 @@ class BookingController {
         }
       }
 
-      // Check if booking can be modified (only pending bookings)
-      if (existingBooking.status !== 'pending') {
+      // Check if booking can be modified (only unpaidbookings)
+      if (existingBooking.paymentStatus === 'paid') {
         return res.status(400).json({
-          message: 'Only pending bookings can be modified'
+          message: 'Cannot modify paid bookings'
         });
       }
 
@@ -331,7 +332,7 @@ class BookingController {
       });
     } catch (error) {
       console.error('Error updating booking:', error);
-      
+
       // Handle validation errors
       if (error.name === 'ValidationError') {
         const errors = Object.values(error.errors).map(err => err.message);
@@ -352,7 +353,7 @@ class BookingController {
   static async deleteBooking(req, res) {
     try {
       const { id } = req.params;
-      
+
       // Check if booking exists
       const booking = await Booking.findById(id);
       if (!booking) {
@@ -396,7 +397,7 @@ class BookingController {
   static async getBookingsByOrganizer(req, res) {
     try {
       const { organizerId } = req.params;
-      
+
       // Check if organizer exists
       const organizer = await User.findById(organizerId);
       if (!organizer) {
@@ -428,7 +429,7 @@ class BookingController {
   static async getBookingsByVenue(req, res) {
     try {
       const { venueId } = req.params;
-      
+
       // Check if venue exists
       const venue = await Venue.findById(venueId);
       if (!venue) {
@@ -460,12 +461,12 @@ class BookingController {
   static async getBookingStats(req, res) {
     try {
       const { id } = req.params;
-      
+
       // Check if booking exists
       const booking = await Booking.findById(id)
         .populate('venue', 'name location capacity price')
         .populate('organizer', 'name email role');
-      
+
       if (!booking) {
         return res.status(404).json({
           message: 'Booking not found'
@@ -555,6 +556,109 @@ class BookingController {
     }
   }
 
+  // Approve booking (owner only)
+  static async approveBooking(req, res) {
+    try {
+      const { id } = req.params;
+      const { owner_id } = req.body;
+
+      // Check if booking exists
+      const booking = await Booking.findById(id)
+        .populate('venue', 'name owner')
+        .populate('organizer', 'name email');
+
+      if (!booking) {
+        return res.status(404).json({
+          message: 'Booking not found'
+        });
+      }
+
+      // Check if booking is pending
+      if (booking.status !== 'pending') {
+        return res.status(400).json({
+          message: 'Only pending bookings can be approved'
+        });
+      }
+
+      // Verify the user is the venue owner
+      if (booking.venue.owner.toString() !== owner_id) {
+        return res.status(403).json({
+          message: 'Only the venue owner can approve bookings'
+        });
+      }
+
+      // Update booking status
+      booking.status = 'approved';
+      booking.approvedBy = owner_id;
+      booking.approvedAt = new Date();
+
+      await booking.save();
+
+      res.json({
+        message: 'Booking approved successfully',
+        booking: booking
+      });
+    } catch (error) {
+      console.error('Error approving booking:', error);
+      res.status(500).json({
+        message: 'Error approving booking',
+        error: error.message
+      });
+    }
+  }
+
+  // Reject booking (owner only)
+  static async rejectBooking(req, res) {
+    try {
+      const { id } = req.params;
+      const { owner_id, rejection_reason } = req.body;
+
+      // Check if booking exists
+      const booking = await Booking.findById(id)
+        .populate('venue', 'name owner')
+        .populate('organizer', 'name email');
+
+      if (!booking) {
+        return res.status(404).json({
+          message: 'Booking not found'
+        });
+      }
+
+      // Check if booking is pending
+      if (booking.status !== 'pending') {
+        return res.status(400).json({
+          message: 'Only pending bookings can be rejected'
+        });
+      }
+
+      // Verify the user is the venue owner
+      if (booking.venue.owner.toString() !== owner_id) {
+        return res.status(403).json({
+          message: 'Only the venue owner can reject bookings'
+        });
+      }
+
+      // Update booking status
+      booking.status = 'rejected';
+      if (rejection_reason) {
+        booking.notes = `${booking.notes}\n\nRejection reason: ${rejection_reason}`;
+      }
+
+      await booking.save();
+
+      res.json({
+        message: 'Booking rejected successfully',
+        booking: booking
+      });
+    } catch (error) {
+      console.error('Error rejecting booking:', error);
+      res.status(500).json({
+        message: 'Error rejecting booking',
+        error: error.message
+      });
+    }
+  }
+
   // Helper method to calculate duration between two times
   static calculateDuration(startTime, endTime) {
     const start = new Date(`2000-01-01T${startTime}:00`);
@@ -571,7 +675,7 @@ class BookingController {
     const e1 = new Date(`2000-01-01T${end1}:00`);
     const s2 = new Date(`2000-01-01T${start2}:00`);
     const e2 = new Date(`2000-01-01T${end2}:00`);
-    
+
     return (s1 < e2 && e1 > s2);
   }
 }

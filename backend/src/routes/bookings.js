@@ -54,4 +54,14 @@ router.get('/:id/stats', BookingController.getBookingStats);
 // @access  Public
 router.get('/venue/:venueId/availability', BookingController.checkVenueAvailability);
 
+// @route   PATCH /api/bookings/:id/approve
+// @desc    Approve a booking (owner only)
+// @access  Public (for now, will add auth later)
+router.patch('/:id/approve', BookingController.approveBooking);
+
+// @route   PATCH /api/bookings/:id/reject
+// @desc    Reject a booking (owner only)
+// @access  Public (for now, will add auth later)
+router.patch('/:id/reject', BookingController.rejectBooking);
+
 module.exports = router;
