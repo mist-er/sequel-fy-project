@@ -4,12 +4,11 @@ Changed dashboard overview
 --------------------------
 Changed the AVG RATING to Canceled Booking
 
-implemented the dark theme
+==========================
+Implemented the dark theme
 
-made changes to the home page -- dark
-
+implemented dark theme
 
 Made changes to the venue uploading feature
-
 
 fixed filter functionality
