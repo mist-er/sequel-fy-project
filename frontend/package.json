@@ -1,0 +1,20 @@
+{
+  "name": "event-venue-locator-frontend",
+  "version": "1.0.0",
+  "description": "Frontend server for Event Venue Locator system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "frontend",
+    "static-server",
+    "venue-locator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
