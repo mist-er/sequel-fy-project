@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Venue = require('../models/Venue');
 const User = require('../models/User');
+const AvailabilityService = require('../services/availabilityService');
 const { sendBookingConfirmationNotification } = require('../services/notificationService');
 
 class BookingController {
@@ -61,11 +62,24 @@ class BookingController {
         }
       }
 
-      // Check if venue is available for the requested date
-      const isAvailable = await venue.isAvailableForDate(event_date);
-      if (!isAvailable) {
-        return res.status(400).json({
-          message: 'Venue is not available for the selected date'
+      // Check for time conflicts using AvailabilityService
+      const conflictCheck = await AvailabilityService.checkTimeSlotAvailability(
+        venue_id,
+        event_date,
+        start_time,
+        end_time
+      );
+
+      if (!conflictCheck.available) {
+        return res.status(409).json({
+          message: 'Time slot conflict detected',
+          error: 'BOOKING_CONFLICT',
+          conflicts: conflictCheck.conflicts.map(c => ({
+            eventName: c.eventName,
+            startTime: c.startTime,
+            endTime: c.endTime,
+            status: c.status
+          }))
         });
       }
 

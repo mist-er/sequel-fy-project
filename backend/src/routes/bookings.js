@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const BookingController = require('../controllers/bookingController');
+const AvailabilityService = require('../services/availabilityService');
 const { validateBooking, validateBookingUpdate, validateBookingStatus } = require('../middleware/validation');
 const verifyFirebaseIdToken = require('../middleware/firebaseAuth');
 
@@ -62,6 +63,49 @@ router.get('/:id/stats', BookingController.getBookingStats);
 // @route   GET /api/bookings/venue/:venueId/availability
 // @desc    Check venue availability for a date/time range
 // @access  Public
-router.get('/venue/:venueId/availability', BookingController.checkVenueAvailability);
+router.get('/venue/:venueId/availability', async (req, res) => {
+  try {
+    const { venueId } = req.params;
+    const { date, start_time, end_time } = req.query;
+
+    if (!date) {
+      return res.status(400).json({ message: 'Date is required' });
+    }
+
+    if (start_time && end_time) {
+      const result = await AvailabilityService.checkTimeSlotAvailability(
+        venueId,
+        date,
+        start_time,
+        end_time
+      );
+      return res.json({
+        message: 'Time slot availability checked',
+        venue_id: venueId,
+        date: date,
+        available: result.available,
+        status: result.status,
+        conflicting_bookings: result.conflicts,
+        total_bookings_on_date: result.totalBookingsOnDate
+      });
+    } else {
+      const result = await AvailabilityService.checkDateAvailability(venueId, date);
+      return res.json({
+        message: 'Date availability checked',
+        venue_id: venueId,
+        date: date,
+        available: result.available,
+        status: result.status,
+        total_bookings_on_date: result.bookingCount
+      });
+    }
+  } catch (error) {
+    console.error('Error checking availability:', error);
+    res.status(500).json({
+      message: 'Error checking venue availability',
+      error: error.message
+    });
+  }
+});
 
 module.exports = router;

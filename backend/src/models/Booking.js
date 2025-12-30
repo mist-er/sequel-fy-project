@@ -73,6 +73,7 @@ bookingSchema.index({ venue: 1, eventDate: 1 });
 bookingSchema.index({ organizer: 1 });
 bookingSchema.index({ status: 1 });
 bookingSchema.index({ eventDate: 1 });
+bookingSchema.index({ venue: 1, eventDate: 1, status: 1 });
 
 // Virtual for venue information
 bookingSchema.virtual('venueInfo', {

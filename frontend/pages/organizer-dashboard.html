@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../styles/custom.css?v=9">
     <!-- Dark Theme CSS -->
     <link rel="stylesheet" href="../styles/dark-theme.css">
+    <!-- Booking Status CSS -->
+    <link rel="stylesheet" href="../styles/booking-status.css">
     <style>
         body {
             overflow-x: hidden;
@@ -669,6 +671,8 @@
                                         <span>Event Date *</span>
                                     </label>
                                     <input type="date" class="form-control" id="eventDate" name="event_date" required style="border: 2px solid #e9ecef; border-radius: 12px; padding: 14px 18px; font-size: 16px; transition: all 0.3s;">
+                                    <div id="dateAvailabilityStatus" style="margin-top: 12px;"></div>
+                                    <div id="timeSlotSuggestions" style="margin-top: 12px;"></div>
                                 </div>
                             </div>
                             
@@ -694,6 +698,10 @@
                                     </label>
                                     <input type="time" class="form-control" id="endTime" name="end_time" required style="border: 2px solid #e9ecef; border-radius: 12px; padding: 14px 18px; font-size: 16px; transition: all 0.3s;">
                                 </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div id="timeConflictAlert"></div>
                             </div>
                             
                             <div class="col-12">
@@ -952,7 +960,7 @@
     <script>
         const API_BASE = 'http://localhost:3000/api';
         let currentUser = null;
-        let selectedVenueId = null;
+        window.selectedVenueId = null;
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
@@ -1409,7 +1417,7 @@
         }
 
         function openBookingModal(venueId) {
-            selectedVenueId = venueId;
+            window.selectedVenueId = venueId;
             document.getElementById('modalTitle').textContent = 'Book Venue';
             document.getElementById('bookingForm').reset();
             const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
@@ -1741,6 +1749,7 @@
         // Attach event listeners to filters
         document.addEventListener('DOMContentLoaded', function() {
             initializeFilterDropdowns();
+            initializeBookingForm();
             
             const locationFilter = document.getElementById('locationFilter');
             const categoryFilter = document.getElementById('categoryFilter');
@@ -1756,9 +1765,13 @@
         // Reset modal when closed
         document.getElementById('bookingModal').addEventListener('hidden.bs.modal', function() {
             document.getElementById('bookingForm').reset();
-            selectedVenueId = null;
+            window.selectedVenueId = null;
         });
     </script>
+    <!-- Availability Checker Script -->
+    <script src="../scripts/availabilityChecker.js"></script>
+    <!-- Booking Form Integration Script -->
+    <script src="../scripts/bookingForm.js"></script>
     <!-- Theme Toggle Script -->
     <script src="../scripts/theme-toggle.js"></script>
 </body>

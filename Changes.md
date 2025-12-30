@@ -12,3 +12,5 @@ implemented dark theme
 Made changes to the venue uploading feature
 
 fixed filter functionality
+
+Implemented the Booking Status & Conflict Detection
