@@ -26,6 +26,21 @@ class BookingController {
         });
       }
 
+      // 🔒 FIRST CHECK: Venue status
+      if (venue.venueStatus !== 'active') {
+        let statusMessage = '';
+        if (venue.venueStatus === 'unavailable') {
+          statusMessage = 'This venue is temporarily closed and cannot be booked at this time.';
+        } else if (venue.venueStatus === 'inactive') {
+          statusMessage = 'This venue is suspended and cannot be booked.';
+        }
+        return res.status(400).json({
+          message: 'Venue is not available for booking',
+          reason: statusMessage,
+          venueStatus: venue.venueStatus
+        });
+      }
+
       if (!venue.isActive) {
         return res.status(400).json({
           message: 'Venue is not available for booking'

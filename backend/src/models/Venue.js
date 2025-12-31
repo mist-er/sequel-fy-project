@@ -64,6 +64,12 @@ const venueSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  venueStatus: {
+    type: String,
+    enum: ['active', 'unavailable', 'inactive'],
+    default: 'active',
+    required: true
   }
 }, {
   timestamps: true,

@@ -1082,8 +1082,38 @@
                     <div class="card h-100 shadow-sm">
                         <div class="position-relative" style="height: 200px;">
                             ${imageHtml}
-                            <div class="position-absolute top-0 end-0 m-2" style="z-index: 5;">
-                                <span class="badge ${venue.isActive ? 'bg-success' : 'bg-secondary'}">${venue.isActive ? 'Active' : 'Inactive'}</span>
+                            <div class="position-absolute top-0 end-0 m-3" style="z-index: 5;">
+                                <span style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    padding: 8px 14px;
+                                    border-radius: 20px;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                                    backdrop-filter: blur(8px);
+                                    background: ${
+                                        venue.venueStatus === 'active' ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' :
+                                        venue.venueStatus === 'unavailable' ? 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)' :
+                                        'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
+                                    };
+                                    color: ${
+                                        venue.venueStatus === 'unavailable' ? '#000' : '#fff'
+                                    };
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.5px;
+                                    transition: all 0.3s ease;
+                                ">
+                                    <i class="fas ${
+                                        venue.venueStatus === 'active' ? 'fa-check-circle' :
+                                        venue.venueStatus === 'unavailable' ? 'fa-clock' :
+                                        'fa-times-circle'
+                                    }" style="font-size: 14px;"></i>
+                                    <span>${venue.venueStatus === 'active' ? 'Active' :
+                                          venue.venueStatus === 'unavailable' ? 'Closed' :
+                                          'Inactive'}</span>
+                                </span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1106,18 +1136,97 @@
                             </div>
                             
                             <!-- Action Buttons -->
-                            <div class="d-flex gap-2 mt-3 flex-wrap">
-                                <button class="btn btn-sm" onclick="viewVenueDetails('${venue._id}')" title="View All Images & Details" style="background: #17a2b8; color: white; border: none; flex: 1; min-width: 100px;">
-                                    <i class="fas fa-images me-1"></i>View
+                            <div style="display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: flex-start;">
+                                <button onclick="toggleVenueStatus('${venue._id}', '${venue.venueStatus}')" title="Toggle Venue Status" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #6f42c1 0%, #7952b3 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(111, 66, 193, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(111, 66, 193, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(111, 66, 193, 0.3)'">
+                                    <i class="fas fa-sliders-h" style="font-size: 12px;"></i><span>Status</span>
                                 </button>
-                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.location)}" target="_blank" class="btn btn-sm" title="View on Map" style="background: #28a745; color: white; border: none; flex: 1; min-width: 100px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-map me-1"></i>Map
+                                <button onclick="viewVenueDetails('${venue._id}')" title="View All Images & Details" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(23, 162, 184, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(23, 162, 184, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(23, 162, 184, 0.3)'">
+                                    <i class="fas fa-images" style="font-size: 12px;"></i><span>Gallery</span>
+                                </button>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.location)}" target="_blank" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+                                    text-decoration: none;
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(40, 167, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(40, 167, 69, 0.3)'">
+                                    <i class="fas fa-map-marker-alt" style="font-size: 12px;"></i><span>Map</span>
                                 </a>
-                                <button class="btn btn-sm" onclick="editVenue('${venue._id}')" title="Edit Venue" style="background: #ffc107; color: #000; border: none; flex: 1; min-width: 100px; font-weight: 600;">
-                                    <i class="fas fa-edit me-1"></i>Edit
+                                <button onclick="editVenue('${venue._id}')" title="Edit Venue" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+                                    color: #000;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(255, 193, 7, 0.3)'">
+                                    <i class="fas fa-pen" style="font-size: 12px;"></i><span>Edit</span>
                                 </button>
-                                <button class="btn btn-sm" onclick="deleteVenue('${venue._id}')" title="Delete Venue" style="background: #dc3545; color: white; border: none; flex: 1; min-width: 100px;">
-                                    <i class="fas fa-trash me-1"></i>Delete
+                                <button onclick="deleteVenue('${venue._id}')" title="Delete Venue" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(220, 53, 69, 0.3)'">
+                                    <i class="fas fa-trash-alt" style="font-size: 12px;"></i><span>Delete</span>
                                 </button>
                             </div>
                         </div>
@@ -1865,6 +1974,205 @@
                     confirmButtonColor: '#ff6b35'
                 });
             }
+        }
+
+        // Toggle venue status
+        async function toggleVenueStatus(venueId, currentStatus) {
+            const statusOptions = [
+                { 
+                    value: 'active', 
+                    label: 'Active',
+                    description: 'Bookings allowed',
+                    icon: 'fa-check-circle',
+                    color: '#28a745',
+                    bgColor: '#e8f5e9'
+                },
+                { 
+                    value: 'unavailable', 
+                    label: 'Temporarily Closed',
+                    description: 'No new bookings',
+                    icon: 'fa-ban',
+                    color: '#ffc107',
+                    bgColor: '#fff8e1'
+                },
+                { 
+                    value: 'inactive', 
+                    label: 'Inactive',
+                    description: 'Hidden from search',
+                    icon: 'fa-times-circle',
+                    color: '#dc3545',
+                    bgColor: '#ffebee'
+                }
+            ];
+
+            let selectedStatus = currentStatus || 'active';
+
+            const htmlContent = `
+                <div style="text-align: left; padding: 20px 0;">
+                    <p style="margin-bottom: 24px; color: #666; font-size: 15px;">
+                        Select the status for your venue. Your choice will affect whether organizers can book this venue.
+                    </p>
+                    <div style="display: grid; gap: 12px;">
+                        ${statusOptions.map(opt => `
+                            <div class="status-card" 
+                                 data-status="${opt.value}"
+                                 onclick="selectStatus('${opt.value}')"
+                                 style="
+                                    padding: 16px;
+                                    border: 2.5px solid ${selectedStatus === opt.value ? opt.color : '#e0e0e0'};
+                                    border-radius: 12px;
+                                    background-color: ${selectedStatus === opt.value ? opt.bgColor : '#f9f9f9'};
+                                    cursor: pointer;
+                                    transition: all 0.3s ease;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 16px;
+                                 "
+                                 onmouseover="this.style.borderColor='${opt.color}'; this.style.backgroundColor='${opt.bgColor}'; this.style.transform='translateX(4px)';"
+                                 onmouseout="if(selectedStatus !== '${opt.value}') { this.style.borderColor='#e0e0e0'; this.style.backgroundColor='#f9f9f9'; } this.style.transform='translateX(0)';">
+                                <div style="flex-shrink: 0;">
+                                    <i class="fas ${opt.icon}" style="font-size: 28px; color: ${opt.color};"></i>
+                                </div>
+                                <div style="flex-grow: 1;">
+                                    <div style="font-weight: 600; font-size: 15px; color: #222; margin-bottom: 4px;">
+                                        ${opt.label}
+                                    </div>
+                                    <div style="font-size: 13px; color: #999;">
+                                        ${opt.description}
+                                    </div>
+                                </div>
+                                <div style="flex-shrink: 0;">
+                                    <div style="
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 2px solid ${selectedStatus === opt.value ? opt.color : '#ddd'};
+                                        border-radius: 50%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        background-color: ${selectedStatus === opt.value ? opt.color : 'transparent'};
+                                        transition: all 0.3s ease;
+                                    ">
+                                        ${selectedStatus === opt.value ? '<i class="fas fa-check" style="color: white; font-size: 12px;"></i>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <style>
+                    .status-card {
+                        user-select: none;
+                    }
+                    .status-card:active {
+                        transform: scale(0.98) !important;
+                    }
+                </style>
+            `;
+
+            const result = await Swal.fire({
+                title: '<strong style="font-size: 24px; color: #2c3e50;">Manage Venue Status</strong>',
+                html: htmlContent,
+                icon: null,
+                showCancelButton: true,
+                confirmButtonText: 'Confirm & Update',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#ff6b35',
+                cancelButtonColor: '#6c757d',
+                didOpen: () => {
+                    // Store selected status globally for this modal
+                    window.selectedVenueStatus = selectedStatus;
+                },
+                preConfirm: () => {
+                    return window.selectedVenueStatus;
+                }
+            });
+
+            if (!result.value) {
+                return; // User cancelled
+            }
+
+            const newStatus = result.value;
+
+            try {
+                const response = await fetch(`${API_BASE}/venues/${venueId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        venueStatus: newStatus,
+                        owner_id: currentUser._id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const statusOption = statusOptions.find(opt => opt.value === newStatus);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status Updated!',
+                        html: `
+                            <div style="text-align: center;">
+                                <i class="fas ${statusOption.icon}" style="font-size: 48px; color: ${statusOption.color}; margin-bottom: 16px;"></i>
+                                <p style="margin: 16px 0 0 0; color: #666; font-size: 16px;">
+                                    Your venue is now <strong style="color: ${statusOption.color};">${statusOption.label.toUpperCase()}</strong>
+                                </p>
+                            </div>
+                        `,
+                        confirmButtonColor: '#ff6b35',
+                        timer: 2500
+                    });
+                    // Reload venues to refresh the list with new status badge
+                    loadVenues();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: data.message || 'Failed to update venue status',
+                        confirmButtonColor: '#ff6b35'
+                    });
+                    console.error('Status update error:', data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Please check your connection and try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
+            }
+        }
+
+        // Global function to select status from modal
+        function selectStatus(status) {
+            window.selectedVenueStatus = status;
+            // Update visual state
+            document.querySelectorAll('.status-card').forEach(card => {
+                const cardStatus = card.dataset.status;
+                const statusOptions = [
+                    { value: 'active', color: '#28a745', bgColor: '#e8f5e9' },
+                    { value: 'unavailable', color: '#ffc107', bgColor: '#fff8e1' },
+                    { value: 'inactive', color: '#dc3545', bgColor: '#ffebee' }
+                ];
+                const option = statusOptions.find(o => o.value === cardStatus);
+                
+                if (cardStatus === status) {
+                    card.style.borderColor = option.color;
+                    card.style.backgroundColor = option.bgColor;
+                    card.querySelector('div:last-child > div').style.borderColor = option.color;
+                    card.querySelector('div:last-child > div').style.backgroundColor = option.color;
+                    card.querySelector('div:last-child > div').innerHTML = '<i class="fas fa-check" style="color: white; font-size: 12px;"></i>';
+                } else {
+                    card.style.borderColor = '#e0e0e0';
+                    card.style.backgroundColor = '#f9f9f9';
+                    card.querySelector('div:last-child > div').style.borderColor = '#ddd';
+                    card.querySelector('div:last-child > div').style.backgroundColor = 'transparent';
+                    card.querySelector('div:last-child > div').innerHTML = '';
+                }
+            });
         }
 
         function openAddVenueModal() {

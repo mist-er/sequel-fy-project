@@ -481,7 +481,8 @@ class VenueController {
         contactPhone: contact_phone,
         photoUrl,
         photoUrls,
-        owner: owner_id
+        owner: owner_id,
+        venueStatus: 'active' // New venues start as active by default
       };
 
       // Create venue
@@ -844,6 +845,55 @@ class VenueController {
       console.error('Error checking availability:', error);
       res.status(500).json({
         message: 'Error checking venue availability',
+        error: error.message
+      });
+    }
+  }
+
+  // Toggle venue status (active, unavailable, inactive)
+  static async updateVenueStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { venueStatus } = req.body;
+
+      // Validate status
+      const validStatuses = ['active', 'unavailable', 'inactive'];
+      if (!venueStatus || !validStatuses.includes(venueStatus)) {
+        return res.status(400).json({
+          message: 'Invalid venue status',
+          validStatuses: validStatuses
+        });
+      }
+
+      // Check if venue exists
+      const venue = await Venue.findById(id);
+      if (!venue) {
+        return res.status(404).json({
+          message: 'Venue not found'
+        });
+      }
+
+      // Check if requester is the owner
+      if (venue.owner.toString() !== req.body.owner_id && !req.body.is_admin) {
+        return res.status(403).json({
+          message: 'Only the venue owner can change the venue status'
+        });
+      }
+
+      // Update venue status
+      venue.venueStatus = venueStatus;
+      await venue.save();
+      await venue.populate('owner', 'name email role');
+
+      res.json({
+        message: 'Venue status updated successfully',
+        venue: venue,
+        newStatus: venueStatus
+      });
+    } catch (error) {
+      console.error('Error updating venue status:', error);
+      res.status(500).json({
+        message: 'Error updating venue status',
         error: error.message
       });
     }

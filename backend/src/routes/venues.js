@@ -87,6 +87,11 @@ router.get('/:id', VenueController.getVenueById);
 // Note: handleMultipleUpload must run before validateVenue to parse FormData into req.body
 router.put('/:id', handleMultipleUpload, validateVenue, VenueController.updateVenue);
 
+// @route   PATCH /api/venues/:id/status
+// @desc    Update venue status (active, unavailable, inactive)
+// @access  Public (venue owner only)
+router.patch('/:id/status', VenueController.updateVenueStatus);
+
 // @route   DELETE /api/venues/:id
 // @desc    Delete venue (soft delete)
 // @access  Public (for now, will add auth later)
