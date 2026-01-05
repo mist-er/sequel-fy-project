@@ -127,6 +127,18 @@ venueSchema.statics.findWithFilters = function(filters = {}) {
     query.owner = filters.ownerId;
   }
 
+  if (filters.venueStatus) {
+    // Allow matching venues with the status OR venues without the field set (defaults to 'active')
+    if (filters.venueStatus === 'active') {
+      query.$or = [
+        { venueStatus: 'active' },
+        { venueStatus: { $exists: false } }
+      ];
+    } else {
+      query.venueStatus = filters.venueStatus;
+    }
+  }
+
   return this.find(query)
     .populate('owner', 'name email role')
     .sort({ createdAt: -1 })
@@ -144,6 +156,18 @@ venueSchema.statics.searchVenues = function(searchTerm, filters = {}) {
   // Add additional filters
   if (filters.category) {
     query.category = filters.category;
+  }
+
+  if (filters.venueStatus) {
+    // Allow matching venues with the status OR venues without the field set (defaults to 'active')
+    if (filters.venueStatus === 'active') {
+      query.$or = [
+        { venueStatus: 'active' },
+        { venueStatus: { $exists: false } }
+      ];
+    } else {
+      query.venueStatus = filters.venueStatus;
+    }
   }
   
   if (filters.minCapacity) {

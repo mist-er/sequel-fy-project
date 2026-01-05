@@ -528,6 +528,7 @@ class VenueController {
         min_price,
         max_price,
         owner_id,
+        venue_status,
         limit = 20,
         offset = 0
       } = req.query;
@@ -541,6 +542,7 @@ class VenueController {
       if (min_price) filters.minPrice = parseFloat(min_price);
       if (max_price) filters.maxPrice = parseFloat(max_price);
       if (owner_id) filters.ownerId = owner_id;
+      if (venue_status) filters.venueStatus = venue_status;
       
       filters.limit = parseInt(limit);
       filters.offset = parseInt(offset);
@@ -608,6 +610,7 @@ class VenueController {
       if (category) filters.category = category;
       if (min_capacity) filters.minCapacity = parseInt(min_capacity);
       if (max_price) filters.maxPrice = parseFloat(max_price);
+      if (req.query.venue_status) filters.venueStatus = req.query.venue_status;
       filters.limit = parseInt(limit);
 
       const venues = await Venue.searchVenues(search, filters);

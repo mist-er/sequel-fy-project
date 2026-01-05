@@ -586,6 +586,12 @@
                                 <option value="corporate">Corporate</option>
                                 <option value="party">Party</option>
                             </select>
+                            <select class="form-select" id="statusFilter" style="width: auto;">
+                                <option value="">All Status</option>
+                                <option value="active">Available</option>
+                                <option value="unavailable">Closed</option>
+                                <option value="inactive">Unavailable</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -1809,12 +1815,27 @@
                     `<option value="${cat === 'All Categories' ? '' : cat}">${cat}</option>`
                 ).join('');
             }
+
+            // Populate status dropdown
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                const statuses = [
+                    { label: 'All Status', value: '' },
+                    { label: 'Available', value: 'active' },
+                    { label: 'Closed', value: 'unavailable' },
+                    { label: 'Unavailable', value: 'inactive' }
+                ];
+                statusFilter.innerHTML = statuses.map(status => 
+                    `<option value="${status.value}">${status.label}</option>`
+                ).join('');
+            }
         }
 
         // Filter functionality
         function filterVenues() {
             const location = document.getElementById('locationFilter')?.value || '';
             const category = document.getElementById('categoryFilter')?.value || '';
+            const status = document.getElementById('statusFilter')?.value || '';
             
             // Build query parameters
             let url = `${API_BASE}/venues`;
@@ -1825,6 +1846,9 @@
             }
             if (category && category.trim() !== '') {
                 params.append('category', category);
+            }
+            if (status && status.trim() !== '') {
+                params.append('venue_status', status);
             }
             
             if (params.toString()) {
@@ -1841,12 +1865,16 @@
             
             const locationFilter = document.getElementById('locationFilter');
             const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
             
             if (locationFilter) {
                 locationFilter.addEventListener('change', filterVenues);
             }
             if (categoryFilter) {
                 categoryFilter.addEventListener('change', filterVenues);
+            }
+            if (statusFilter) {
+                statusFilter.addEventListener('change', filterVenues);
             }
         });
 

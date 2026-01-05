@@ -94,16 +94,19 @@ function searchVenues() {
     const searchInput = document.getElementById('searchInput');
     const locationSelect = document.getElementById('locationSelect');
     const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
     
     const searchTerm = searchInput?.value.toLowerCase() || '';
     const location = locationSelect?.value || '';
     const category = categorySelect?.value || '';
+    const status = statusSelect?.value || '';
     
     // Build query parameters
     const params = new URLSearchParams();
     if (searchTerm) params.append('search', searchTerm);
     if (location) params.append('location', location);
     if (category) params.append('category', category);
+    if (status) params.append('venue_status', status);
     
     // Make API call with filters
     const url = params.toString() ? `${API_BASE}/venues/search?${params.toString()}` : `${API_BASE}/venues`;
@@ -146,8 +149,16 @@ function initializeHomePageFilterDropdowns() {
         'Other'
     ];
 
+    const statuses = [
+        'All Status',
+        { label: 'Available', value: 'active' },
+        { label: 'Closed', value: 'unavailable' },
+        { label: 'Unavailable', value: 'inactive' }
+    ];
+
     const locationSelect = document.getElementById('locationSelect');
     const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
 
     if (locationSelect && locationSelect.innerHTML.trim() === '') {
         locationSelect.innerHTML = locations.map(loc => 
@@ -159,6 +170,15 @@ function initializeHomePageFilterDropdowns() {
         categorySelect.innerHTML = categories.map(cat => 
             `<option value="${cat === 'All Categories' ? '' : cat}">${cat}</option>`
         ).join('');
+    }
+
+    if (statusSelect && statusSelect.innerHTML.trim() === '') {
+        statusSelect.innerHTML = statuses.map(status => {
+            if (status === 'All Status') {
+                return `<option value="">${status}</option>`;
+            }
+            return `<option value="${status.value}">${status.label}</option>`;
+        }).join('');
     }
 }
 
@@ -272,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add filter change handlers
     const locationSelect = document.getElementById('locationSelect');
     const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
     
     if (locationSelect) {
         locationSelect.addEventListener('change', searchVenues);
@@ -279,6 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (categorySelect) {
         categorySelect.addEventListener('change', searchVenues);
+    }
+
+    if (statusSelect) {
+        statusSelect.addEventListener('change', searchVenues);
     }
     
     // Add animation classes on scroll

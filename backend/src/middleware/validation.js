@@ -177,6 +177,11 @@ const validateVenueSearch = [
     .isInt({ min: 0 })
     .withMessage('Offset must be a non-negative integer'),
 
+  body('venue_status')
+    .optional()
+    .isIn(['active', 'unavailable', 'inactive'])
+    .withMessage('Venue status must be one of: active, unavailable, inactive'),
+
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
