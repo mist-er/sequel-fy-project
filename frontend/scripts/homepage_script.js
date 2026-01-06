@@ -128,7 +128,7 @@ function searchVenues() {
 // Initialize filter dropdowns with options
 function initializeHomePageFilterDropdowns() {
     const locations = [
-        'All Locations',
+        'Location',
         'Accra',
         'Tema',
         'Kumasi',
@@ -141,7 +141,7 @@ function initializeHomePageFilterDropdowns() {
     ];
 
     const categories = [
-        'All Categories',
+        'Categories',
         'Wedding',
         'Corporate',
         'Party',
@@ -150,7 +150,7 @@ function initializeHomePageFilterDropdowns() {
     ];
 
     const statuses = [
-        'All Status',
+        'Status',
         { label: 'Available', value: 'active' },
         { label: 'Closed', value: 'unavailable' },
         { label: 'Unavailable', value: 'inactive' }
@@ -162,19 +162,19 @@ function initializeHomePageFilterDropdowns() {
 
     if (locationSelect && locationSelect.innerHTML.trim() === '') {
         locationSelect.innerHTML = locations.map(loc => 
-            `<option value="${loc === 'All Locations' ? '' : loc}">${loc}</option>`
+            `<option value="${loc === 'Location' ? '' : loc}">${loc}</option>`
         ).join('');
     }
 
     if (categorySelect && categorySelect.innerHTML.trim() === '') {
         categorySelect.innerHTML = categories.map(cat => 
-            `<option value="${cat === 'All Categories' ? '' : cat}">${cat}</option>`
+            `<option value="${cat === 'Categories' ? '' : cat}">${cat}</option>`
         ).join('');
     }
 
     if (statusSelect && statusSelect.innerHTML.trim() === '') {
         statusSelect.innerHTML = statuses.map(status => {
-            if (status === 'All Status') {
+            if (status === 'Status') {
                 return `<option value="">${status}</option>`;
             }
             return `<option value="${status.value}">${status.label}</option>`;

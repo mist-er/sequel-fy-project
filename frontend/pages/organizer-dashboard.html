@@ -575,19 +575,19 @@
                         <h2 class="fw-bold">Browse Venues</h2>
                         <div class="d-flex gap-2">
                             <select class="form-select" id="locationFilter" style="width: auto;">
-                                <option value="">All Locations</option>
+                                <option value="">Location</option>
                                 <option value="accra">Accra</option>
                                 <option value="kumasi">Kumasi</option>
                                 <option value="tema">Tema</option>
                             </select>
                             <select class="form-select" id="categoryFilter" style="width: auto;">
-                                <option value="">All Categories</option>
+                                <option value="">Categories</option>
                                 <option value="wedding">Wedding</option>
                                 <option value="corporate">Corporate</option>
                                 <option value="party">Party</option>
                             </select>
                             <select class="form-select" id="statusFilter" style="width: auto;">
-                                <option value="">All Status</option>
+                                <option value="">Status</option>
                                 <option value="active">Available</option>
                                 <option value="unavailable">Closed</option>
                                 <option value="inactive">Unavailable</option>
@@ -1820,7 +1820,7 @@
             const statusFilter = document.getElementById('statusFilter');
             if (statusFilter) {
                 const statuses = [
-                    { label: 'All Status', value: '' },
+                    { label: 'Status', value: '' },
                     { label: 'Available', value: 'active' },
                     { label: 'Closed', value: 'unavailable' },
                     { label: 'Unavailable', value: 'inactive' }
