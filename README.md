@@ -78,10 +78,10 @@ FY-project/
 
 ### Backend (.env)
 ```env
-PORT=3000
+PORT=
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/event-venue-locator
-JWT_SECRET=your-super-secret-jwt-key-here
+MONGODB_URI=mongodb:
+JWT_SECRET=your-
 JWT_EXPIRES_IN=7d
 UPLOAD_PATH=./uploads
 MAX_FILE_SIZE=5242880
@@ -215,4 +215,5 @@ This project is licensed under the MIT License.
 ## 📞 Support
 
 For support, KINDLY HIT ME UP 
+
 
