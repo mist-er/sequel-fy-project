@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
   fcmTokens: {
     type: [String],
     default: []
+  },
+  favorites: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Venue',
+    default: []
   }
 }, {
   timestamps: true,

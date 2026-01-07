@@ -39,4 +39,20 @@ router.post(
 // @access  Public (for testing)
 router.get('/:id', UserController.getUserById);
 
+// @route   POST /api/users/:userId/favorites/:venueId
+// @desc    Add a venue to user's favorites
+// @access  Public (for now, will add auth later)
+router.post('/:userId/favorites/:venueId', UserController.addToFavorites);
+
+// @route   DELETE /api/users/:userId/favorites/:venueId
+// @desc    Remove a venue from user's favorites
+// @access  Public (for now, will add auth later)
+router.delete('/:userId/favorites/:venueId', UserController.removeFromFavorites);
+
+// @route   GET /api/users/:userId/favorites
+// @desc    Get all favorite venues for a user
+// @access  Public (for now, will add auth later)
+router.get('/:userId/favorites', UserController.getFavorites);
+
 module.exports = router;
+
