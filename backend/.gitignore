@@ -5,6 +5,10 @@
 .env.test.local
 .env.production.local
 
+#update documentation ignore
+updates.doc/
+*:Zone.Identifier
+
 # Dependencies
 node_modules/
 npm-debug.log*

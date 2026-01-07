@@ -94,19 +94,24 @@ function searchVenues() {
     const searchInput = document.getElementById('searchInput');
     const locationSelect = document.getElementById('locationSelect');
     const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
     
     const searchTerm = searchInput?.value.toLowerCase() || '';
     const location = locationSelect?.value || '';
     const category = categorySelect?.value || '';
+    const status = statusSelect?.value || '';
     
     // Build query parameters
     const params = new URLSearchParams();
     if (searchTerm) params.append('search', searchTerm);
     if (location) params.append('location', location);
     if (category) params.append('category', category);
+    if (status) params.append('venue_status', status);
     
     // Make API call with filters
-    fetch(`${API_BASE}/venues/search?${params.toString()}`)
+    const url = params.toString() ? `${API_BASE}/venues/search?${params.toString()}` : `${API_BASE}/venues`;
+    
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             if (data.venues) {
@@ -118,6 +123,63 @@ function searchVenues() {
             // Fallback to static venues
             showStaticVenues();
         });
+}
+
+// Initialize filter dropdowns with options
+function initializeHomePageFilterDropdowns() {
+    const locations = [
+        'Location',
+        'Accra',
+        'Tema',
+        'Kumasi',
+        'Sekondi',
+        'Cape Coast',
+        'Takoradi',
+        'Obuasi',
+        'Tamale',
+        'Koforidua'
+    ];
+
+    const categories = [
+        'Categories',
+        'Wedding',
+        'Corporate',
+        'Party',
+        'Conference',
+        'Other'
+    ];
+
+    const statuses = [
+        'Status',
+        { label: 'Available', value: 'active' },
+        { label: 'Closed', value: 'unavailable' },
+        { label: 'Unavailable', value: 'inactive' }
+    ];
+
+    const locationSelect = document.getElementById('locationSelect');
+    const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
+
+    if (locationSelect && locationSelect.innerHTML.trim() === '') {
+        locationSelect.innerHTML = locations.map(loc => 
+            `<option value="${loc === 'Location' ? '' : loc}">${loc}</option>`
+        ).join('');
+    }
+
+    if (categorySelect && categorySelect.innerHTML.trim() === '') {
+        categorySelect.innerHTML = categories.map(cat => 
+            `<option value="${cat === 'Categories' ? '' : cat}">${cat}</option>`
+        ).join('');
+    }
+
+    if (statusSelect && statusSelect.innerHTML.trim() === '') {
+        statusSelect.innerHTML = statuses.map(status => {
+            if (status === 'Status') {
+                return `<option value="">${status}</option>`;
+            }
+            return `<option value="${status.value}">${status.label}</option>`;
+        }).join('');
+    }
 }
 
 // Scroll to top functionality
@@ -199,6 +261,9 @@ document.addEventListener('DOMContentLoaded', function() {
         showLoading(venuesGrid);
     }
     
+    // Initialize filter dropdowns
+    initializeHomePageFilterDropdowns();
+    
     // Load venues
     loadVenues();
     
@@ -227,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add filter change handlers
     const locationSelect = document.getElementById('locationSelect');
     const categorySelect = document.getElementById('categorySelect');
+    const statusSelect = document.getElementById('statusSelect');
     
     if (locationSelect) {
         locationSelect.addEventListener('change', searchVenues);
@@ -234,6 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (categorySelect) {
         categorySelect.addEventListener('change', searchVenues);
+    }
+
+    if (statusSelect) {
+        statusSelect.addEventListener('change', searchVenues);
     }
     
     // Add animation classes on scroll

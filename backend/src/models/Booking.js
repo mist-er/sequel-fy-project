@@ -37,40 +37,25 @@ const bookingSchema = new mongoose.Schema({
     required: [true, 'Total cost is required'],
     min: [0, 'Total cost must be a positive number']
   },
+  isPaid: {
+    type: Boolean,
+    default: false
+  },
+  paymentReference: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  paymentDate: {
+    type: Date
+  },
   status: {
     type: String,
     enum: {
-      values: ['pending', 'approved', 'confirmed', 'cancelled', 'rejected'],
-      message: 'Status must be pending, approved, confirmed, cancelled, or rejected'
+      values: ['pending', 'confirmed', 'cancelled'],
+      message: 'Status must be pending, confirmed, or cancelled'
     },
     default: 'pending'
-  },
-  paymentStatus: {
-    type: String,
-    enum: {
-      values: ['unpaid', 'paid', 'refunded'],
-      message: 'Payment status must be unpaid, paid, or refunded'
-    },
-    default: 'unpaid'
-  },
-  paymentMethod: {
-    type: String,
-    enum: ['cash', 'mobile_money', 'bank_transfer', 'card', 'other'],
-    trim: true
-  },
-  transactionId: {
-    type: String,
-    trim: true
-  },
-  approvedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  approvedAt: {
-    type: Date
-  },
-  paidAt: {
-    type: Date
   },
   notes: {
     type: String,
@@ -88,6 +73,7 @@ bookingSchema.index({ venue: 1, eventDate: 1 });
 bookingSchema.index({ organizer: 1 });
 bookingSchema.index({ status: 1 });
 bookingSchema.index({ eventDate: 1 });
+bookingSchema.index({ venue: 1, eventDate: 1, status: 1 });
 
 // Virtual for venue information
 bookingSchema.virtual('venueInfo', {
@@ -106,11 +92,11 @@ bookingSchema.virtual('organizerInfo', {
 });
 
 // Validation to ensure end time is after start time
-bookingSchema.pre('save', function (next) {
+bookingSchema.pre('save', function(next) {
   if (this.startTime && this.endTime) {
     const start = new Date(`2000-01-01T${this.startTime}:00`);
     const end = new Date(`2000-01-01T${this.endTime}:00`);
-
+    
     if (end <= start) {
       return next(new Error('End time must be after start time'));
     }
