@@ -2,15 +2,189 @@ const paypal = require('@paypal/checkout-server-sdk');
 const { client } = require('../config/paypal');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
+const axios = require('axios');
 
 class PaymentController {
+    // =============== PAYSTACK METHODS ===============
+
+    // Initialize Paystack transaction
+    static async initializePaystack(req, res) {
+        try {
+            const { bookingId } = req.body;
+
+            if (!process.env.PAYSTACK_SECRET_KEY) {
+                console.error('CRITICAL: PAYSTACK_SECRET_KEY is not defined in .env');
+                return res.status(500).json({ message: 'Payment gateway configuration error' });
+            }
+
+            const booking = await Booking.findById(bookingId)
+                .populate('venue', 'name price')
+                .populate('organizer', 'name email');
+
+            console.log('Booking found:', !!booking);
+            if (booking) {
+                console.log('Organizer details:', {
+                    id: booking.organizer?._id,
+                    name: booking.organizer?.name,
+                    email: booking.organizer?.email
+                });
+            }
+
+            if (!booking) {
+                return res.status(404).json({ message: 'Booking not found' });
+            }
+
+            if (booking.isPaid) {
+                return res.status(400).json({ message: 'Booking already paid' });
+            }
+
+            const amount = Math.round(booking.totalCost * 100);
+            console.log('Booking Total Cost:', booking.totalCost);
+            console.log('Calculated Amount (pesewas):', amount);
+
+            if (!amount || amount <= 0) {
+                return res.status(400).json({ message: `Invalid transaction amount: ${booking.totalCost}` });
+            }
+
+            if (!booking.organizer || !booking.organizer.email) {
+                return res.status(400).json({ message: 'Organizer email is missing. Please update your profile.' });
+            }
+
+            console.log(`Initializing Paystack for Booking ${booking._id}: GHS ${booking.totalCost} (${amount} pesewas)`);
+
+            const payload = {
+                "email": booking.organizer.email,
+                "amount": amount, // Paystack expects amount in pesewas/kobo as integer
+                "currency": "GHS",
+                "metadata": {
+                    "bookingId": booking._id,
+                    "organizerName": booking.organizer.name,
+                    "venueName": booking.venue.name
+                }
+            };
+
+            console.log('Paystack Payload:', JSON.stringify(payload, null, 2));
+
+            const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
+                headers: {
+                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.data.status) {
+                // Save reference to booking
+                booking.paystackReference = response.data.data.reference;
+                await booking.save();
+
+                // Add amount to the response data for the frontend
+                response.data.data.amount = amount;
+
+                res.json(response.data);
+            } else {
+                res.status(400).json({ message: 'Failed to initialize Paystack transaction' });
+            }
+        } catch (error) {
+            console.error('Error initializing Paystack:', error.response ? error.response.data : error.message);
+            res.status(500).json({
+                message: 'Error initializing payment',
+                error: error.message
+            });
+        }
+    }
+
+    // Verify Paystack payment
+    static async verifyPaystack(req, res) {
+        try {
+            const { reference } = req.params;
+
+            const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
+                headers: {
+                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+                }
+            });
+
+            if (response.data.status && response.data.data.status === 'success') {
+                const { bookingId } = response.data.data.metadata;
+
+                const booking = await Booking.findById(bookingId);
+                if (booking) {
+                    booking.isPaid = true;
+                    booking.paymentStatus = 'paid';
+                    booking.paymentMethod = 'paystack';
+                    booking.paymentReference = reference;
+                    booking.paystackReference = reference;
+                    booking.paymentDate = new Date();
+                    booking.status = 'confirmed';
+                    await booking.save();
+
+                    return res.json({
+                        message: 'Payment verified successfully',
+                        booking: booking
+                    });
+                } else {
+                    return res.status(404).json({ message: 'Booking not found' });
+                }
+            } else {
+                res.status(400).json({
+                    message: 'Payment verification failed',
+                    details: response.data.message
+                });
+            }
+        } catch (error) {
+            console.error('Error verifying Paystack:', error.response ? error.response.data : error.message);
+            res.status(500).json({
+                message: 'Error verifying payment',
+                error: error.message
+            });
+        }
+    }
+
+    // Paystack Webhook
+    static async paystackWebhook(req, res) {
+        try {
+            // Validate Paystack signature
+            const crypto = require('crypto');
+            const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+                .update(JSON.stringify(req.body))
+                .digest('hex');
+
+            if (hash !== req.headers['x-paystack-signature']) {
+                return res.status(401).send('Invalid signature');
+            }
+
+            const event = req.body;
+            if (event.event === 'charge.success') {
+                const { bookingId } = event.data.metadata;
+                const reference = event.data.reference;
+
+                const booking = await Booking.findById(bookingId);
+                if (booking && !booking.isPaid) {
+                    booking.isPaid = true;
+                    booking.paymentStatus = 'paid';
+                    booking.paymentMethod = 'paystack';
+                    booking.paymentReference = reference;
+                    booking.paystackReference = reference;
+                    booking.paymentDate = new Date();
+                    booking.status = 'confirmed';
+                    await booking.save();
+                }
+            }
+
+            res.sendStatus(200);
+        } catch (error) {
+            console.error('Paystack Webhook Error:', error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     // =============== PAYPAL METHODS ===============
 
     // Create PayPal order
     static async createPayPalOrder(req, res) {
         try {
             const { bookingId } = req.body;
-            
+
             // Get booking details
             const booking = await Booking.findById(bookingId)
                 .populate('venue', 'name price')
@@ -69,7 +243,7 @@ class PaymentController {
             });
 
             const response = await client().execute(request);
-            
+
             // Store order ID in booking for verification later
             booking.paypalOrderId = response.result.id;
             booking.paymentStatus = 'pending';
@@ -142,7 +316,7 @@ class PaymentController {
 
             if (event.event_type === 'PAYMENT.CAPTURE.COMPLETED') {
                 const capture = event.resource;
-                
+
                 // Find booking by PayPal order ID
                 const booking = await Booking.findOne({
                     paypalOrderId: capture.supplementary_data.related_ids.order_id
@@ -160,7 +334,7 @@ class PaymentController {
 
             if (event.event_type === 'PAYMENT.CAPTURE.REFUNDED') {
                 const refund = event.resource;
-                
+
                 const booking = await Booking.findOne({
                     paypalTransactionId: refund.links[0].href.split('/').pop()
                 });

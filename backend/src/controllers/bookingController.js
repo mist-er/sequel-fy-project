@@ -13,8 +13,10 @@ class BookingController {
         organizer_id,
         event_name,
         event_date,
+        end_date,
         start_time,
         end_time,
+        guest_count,
         notes
       } = req.body;
 
@@ -98,8 +100,20 @@ class BookingController {
         });
       }
 
-      // Calculate total cost
-      const totalCost = venue.price;
+      // Calculate number of days
+      const startDate = new Date(event_date);
+      const endDate = new Date(end_date || event_date);
+      const diffTime = Math.abs(endDate - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+      // Calculate total cost: Price * Number of Days
+      const totalCost = (venue.price || 0) * diffDays;
+      console.log('--- COST CALCULATION ---');
+      console.log('Venue Price:', venue.price);
+      console.log('Days:', diffDays);
+      console.log('Total Cost:', totalCost);
+
+      const guests = parseInt(guest_count) || 1;
 
       // Create booking data
       const bookingData = {
@@ -107,8 +121,10 @@ class BookingController {
         organizer: organizer_id,
         eventName: event_name,
         eventDate: new Date(event_date),
+        endDate: new Date(end_date || event_date),
         startTime: start_time,
         endTime: end_time,
+        guestCount: guests,
         totalCost: totalCost,
         notes: notes || ''
       };
@@ -139,7 +155,7 @@ class BookingController {
       });
     } catch (error) {
       console.error('Error creating booking:', error);
-      
+
       // Handle validation errors
       if (error.name === 'ValidationError') {
         const errors = Object.values(error.errors).map(err => err.message);
@@ -169,7 +185,7 @@ class BookingController {
       } = req.query;
 
       const query = {};
-      
+
       if (venue_id) query.venue = venue_id;
       if (organizer_id) query.organizer = organizer_id;
       if (status) query.status = status;
@@ -367,7 +383,7 @@ class BookingController {
       });
     } catch (error) {
       console.error('Error updating booking:', error);
-      
+
       // Handle validation errors
       if (error.name === 'ValidationError') {
         const errors = Object.values(error.errors).map(err => err.message);
@@ -388,7 +404,7 @@ class BookingController {
   static async deleteBooking(req, res) {
     try {
       const { id } = req.params;
-      
+
       // Check if booking exists
       const booking = await Booking.findById(id);
       if (!booking) {
@@ -432,7 +448,7 @@ class BookingController {
   static async getBookingsByOrganizer(req, res) {
     try {
       const { organizerId } = req.params;
-      
+
       // Check if organizer exists
       const organizer = await User.findById(organizerId);
       if (!organizer) {
@@ -464,7 +480,7 @@ class BookingController {
   static async getBookingsByVenue(req, res) {
     try {
       const { venueId } = req.params;
-      
+
       // Check if venue exists
       const venue = await Venue.findById(venueId);
       if (!venue) {
@@ -549,12 +565,12 @@ class BookingController {
   static async getBookingStats(req, res) {
     try {
       const { id } = req.params;
-      
+
       // Check if booking exists
       const booking = await Booking.findById(id)
         .populate('venue', 'name location capacity price')
         .populate('organizer', 'name email role');
-      
+
       if (!booking) {
         return res.status(404).json({
           message: 'Booking not found'
@@ -607,7 +623,7 @@ class BookingController {
       booking.paymentDate = new Date();
 
       await booking.save();
-      const populated = await Booking.findById(id).populate([ 
+      const populated = await Booking.findById(id).populate([
         { path: 'venue', select: 'name location capacity price owner' },
         { path: 'organizer', select: 'name email role' }
       ]);
@@ -696,7 +712,7 @@ class BookingController {
     const e1 = new Date(`2000-01-01T${end1}:00`);
     const s2 = new Date(`2000-01-01T${start2}:00`);
     const e2 = new Date(`2000-01-01T${end2}:00`);
-    
+
     return (s1 < e2 && e1 > s2);
   }
 }

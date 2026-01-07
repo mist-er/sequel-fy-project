@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +20,12 @@
         body {
             overflow-x: hidden;
         }
-        
+
         .dashboard-wrapper {
             display: flex;
             min-height: 100vh;
         }
-        
+
         /* Sidebar Styles */
         .sidebar {
             width: 280px;
@@ -34,15 +35,15 @@
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .sidebar-header {
             padding: 25px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 107, 53, 0.1);
         }
-        
+
         .sidebar-logo {
             display: flex;
             align-items: center;
@@ -53,7 +54,7 @@
             text-decoration: none;
             margin-bottom: 20px;
         }
-        
+
         .sidebar-logo img {
             height: 50px;
             width: auto;
@@ -61,21 +62,21 @@
             object-fit: contain;
             filter: brightness(1.15);
         }
-        
+
         .sidebar-logo i {
             font-size: 28px;
         }
-        
+
         .user-profile {
             display: flex;
             align-items: center;
             gap: 15px;
             padding: 15px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             margin-top: 15px;
         }
-        
+
         .user-avatar {
             width: 50px;
             height: 50px;
@@ -87,59 +88,59 @@
             color: white;
             font-size: 20px;
             font-weight: bold;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        
+
         .user-info h6 {
             margin: 0;
             font-size: 14px;
             font-weight: 600;
         }
-        
+
         .user-info p {
             margin: 0;
             font-size: 12px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
         }
-        
+
         .sidebar-nav {
             padding: 20px 0;
         }
-        
+
         .nav-item {
             margin: 5px 15px;
         }
-        
+
         .nav-link {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px 15px;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.3s ease;
             font-size: 14px;
             font-weight: 500;
         }
-        
+
         .nav-link i {
             width: 20px;
             text-align: center;
             font-size: 16px;
         }
-        
+
         .nav-link:hover {
             background: rgba(255, 107, 53, 0.15);
             color: #ff6b35;
         }
-        
+
         .nav-link.active {
             background: linear-gradient(135deg, #ff6b3521, #f7931e96);
             color: white;
             box-shadow: 0 4px 10px rgb(255 107 53 / 27%);
         }
-        
+
         /* Main Content Area */
         .main-content {
             margin-left: 280px;
@@ -147,38 +148,38 @@
             background: #f8f9fa;
             min-height: 100vh;
         }
-        
+
         .content-header {
             background: white;
             padding: 25px 30px;
             border-bottom: 1px solid #e9ecef;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
         .content-header h1 {
             font-size: 28px;
             font-weight: bold;
             color: #2c3e50;
             margin: 0;
         }
-        
+
         .content-header .greeting {
             color: #6c757d;
             font-size: 16px;
             margin-top: 5px;
         }
-        
+
         .content-body {
             padding: 30px;
         }
-        
+
         /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 10px;
             align-items: center;
         }
-        
+
         .btn-action {
             padding: 10px 20px;
             border-radius: 8px;
@@ -190,44 +191,44 @@
             gap: 8px;
             transition: all 0.3s ease;
         }
-        
+
         .btn-action-primary {
             background: linear-gradient(135deg, #ff6b35, #f7931e);
             color: white;
         }
-        
+
         .btn-action-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
             color: white;
         }
-        
+
         .btn-action-outline {
             background: white;
             color: #ff6b35;
             border: 2px solid #ff6b35;
         }
-        
+
         .btn-action-outline:hover {
             background: #ff6b35;
             color: white;
         }
-        
+
         /* Stats Cards */
         .stat-card {
             background: white;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             height: 100%;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
-        
+
         .stat-card-icon {
             width: 60px;
             height: 60px;
@@ -239,14 +240,14 @@
             color: white;
             margin-bottom: 15px;
         }
-        
+
         .stat-card-value {
             font-size: 32px;
             font-weight: bold;
             color: #2c3e50;
             margin: 10px 0;
         }
-        
+
         .stat-card-label {
             font-size: 14px;
             color: #6c757d;
@@ -254,7 +255,7 @@
             letter-spacing: 0.5px;
             font-weight: 600;
         }
-        
+
         /* Sidebar Overlay for Mobile */
         .sidebar-overlay {
             display: none;
@@ -268,11 +269,11 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        
+
         .sidebar-overlay.active {
             opacity: 1;
         }
-        
+
         .mobile-menu-btn {
             display: none;
             position: fixed;
@@ -285,19 +286,19 @@
             padding: 12px 16px;
             border-radius: 8px;
             font-size: 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             min-width: 48px;
             min-height: 48px;
         }
-        
+
         .mobile-menu-btn:active {
             transform: scale(0.95);
         }
-        
+
         /* Hide Google Maps Error Messages */
-        #venueMap > div[style*="color: rgb(51, 51, 51)"],
-        #venueMap > div[style*="Oops"],
-        #venueMap > div:has-text("Oops"),
+        #venueMap>div[style*="color: rgb(51, 51, 51)"],
+        #venueMap>div[style*="Oops"],
+        #venueMap>div:has-text("Oops"),
         #venueMap div[role="alert"],
         #venueMap div[style*="background-color: white"]:has-text("Something went wrong"),
         #venueMap div:has-text("This page didn't load Google Maps"),
@@ -311,149 +312,149 @@
             position: absolute !important;
             z-index: -1 !important;
         }
-        
+
         /* Ensure map container is always visible */
         #venueMap {
             min-height: 500px;
             background: #f8f9fa;
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 width: 280px;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
-                box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+                box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
             }
-            
+
             .sidebar.open {
                 transform: translateX(0);
             }
-            
+
             .sidebar-overlay {
                 display: block;
             }
-            
+
             .main-content {
                 margin-left: 0;
                 width: 100%;
             }
-            
+
             .mobile-menu-btn {
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .content-header {
                 padding: 20px 15px;
                 margin-top: 70px;
             }
-            
+
             .content-header h1 {
                 font-size: 22px;
             }
-            
+
             .content-header .greeting {
                 font-size: 14px;
             }
-            
+
             .content-body {
                 padding: 20px 15px;
             }
-            
+
             .action-buttons {
                 flex-direction: column;
                 width: 100%;
                 gap: 10px;
             }
-            
+
             .btn-action {
                 width: 100%;
                 justify-content: center;
                 padding: 12px 20px;
                 font-size: 15px;
             }
-            
+
             .stat-card {
                 padding: 20px;
                 margin-bottom: 15px;
             }
-            
+
             .stat-card-icon {
                 width: 50px;
                 height: 50px;
                 font-size: 20px;
             }
-            
+
             .stat-card-value {
                 font-size: 28px;
             }
-            
+
             .stat-card-label {
                 font-size: 12px;
             }
-            
+
             .sidebar-header {
                 padding: 20px 15px;
             }
-            
+
             .sidebar-logo {
                 font-size: 20px;
             }
-            
+
             .user-profile {
                 padding: 12px;
                 gap: 12px;
             }
-            
+
             .user-avatar {
                 width: 45px;
                 height: 45px;
                 font-size: 18px;
             }
-            
+
             .user-info h6 {
                 font-size: 13px;
             }
-            
+
             .user-info p {
                 font-size: 11px;
             }
-            
+
             .nav-link {
                 padding: 14px 15px;
                 font-size: 15px;
             }
-            
+
             .nav-link i {
                 font-size: 18px;
             }
         }
-        
+
         @media (max-width: 480px) {
             .sidebar {
                 width: 260px;
             }
-            
+
             .content-header {
                 padding: 15px;
                 margin-top: 65px;
             }
-            
+
             .content-header h1 {
                 font-size: 20px;
             }
-            
+
             .content-body {
                 padding: 15px;
             }
-            
+
             .stat-card {
                 padding: 15px;
             }
-            
+
             .stat-card-value {
                 font-size: 24px;
             }
@@ -462,20 +463,29 @@
         /* Highlighted booking when navigated from Recent Activity */
         .booking-highlight {
             box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12) !important;
-            border: 1px solid rgba(255,107,53,0.6) !important;
+            border: 1px solid rgba(255, 107, 53, 0.6) !important;
             animation: bookingPulse 1.2s ease-in-out;
         }
 
         @keyframes bookingPulse {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-            100% { transform: translateY(0); }
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-wrapper">
-            <!-- Sidebar -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="../pages/index.html" class="sidebar-logo">
@@ -488,8 +498,8 @@
                         <p>Venue Owner</p>
                     </div>
                 </div>
-                </div>
-                
+            </div>
+
             <nav class="sidebar-nav">
                 <div class="nav-item">
                     <a href="#" class="nav-link active" data-tab="dashboard">
@@ -523,13 +533,13 @@
                 </div>
             </nav>
         </aside>
-        
+
         <!-- Main Content -->
         <main class="main-content">
             <button class="mobile-menu-btn" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
-            
+
             <div class="content-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -544,124 +554,132 @@
                             <i class="fas fa-users"></i>
                             <span>Manage Venues</span>
                         </button>
-                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal"
+                            data-bs-target="#addVenueModal">
                             <i class="fas fa-plus"></i>
                             <span>Add Venue</span>
                         </button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="content-body">
-                    <!-- Dashboard Tab -->
+                <!-- Dashboard Tab -->
                 <div class="tab-pane active" id="dashboard-tab">
-                        <!-- Stats Cards -->
-                        <div class="row g-4 mb-4">
-                            <div class="col-lg-3 col-md-6">
+                    <!-- Stats Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-3 col-md-6">
                             <div class="stat-card">
-                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #ff6b35, #f7931e);">
+                                <div class="stat-card-icon"
+                                    style="background: linear-gradient(135deg, #ff6b35, #f7931e);">
                                     <i class="fas fa-building"></i>
                                 </div>
                                 <div class="stat-card-label">Total Venues</div>
                                 <div class="stat-card-value" id="totalVenues">0</div>
-                                </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <div class="stat-card">
-                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                                <div class="stat-card-icon"
+                                    style="background: linear-gradient(135deg, #28a745, #20c997);">
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="stat-card-label">Total Bookings</div>
                                 <div class="stat-card-value" id="totalBookings">0</div>
-                                </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <div class="stat-card">
-                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #ffc107, #ff9800);">
+                                <div class="stat-card-icon"
+                                    style="background: linear-gradient(135deg, #ffc107, #ff9800);">
                                     <i class="fas fa-dollar-sign"></i>
                                 </div>
                                 <div class="stat-card-label">Total Revenue</div>
                                 <div class="stat-card-value" id="totalRevenue">GHS 0</div>
-                                </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <div class="stat-card">
-                                <div class="stat-card-icon" style="background: linear-gradient(135deg, #17a2b8, #138496);">
+                                <div class="stat-card-icon"
+                                    style="background: linear-gradient(135deg, #17a2b8, #138496);">
                                     <i class="fas fa-star"></i>
                                 </div>
                                 <div class="stat-card-label">Canceled Bookings</div>
                                 <div class="stat-card-value" id="avgRating">0</div>
-                                </div>
                             </div>
                         </div>
-                        
-                        <!-- Recent Activity -->
+                    </div>
+
+                    <!-- Recent Activity -->
                     <div class="card shadow-sm">
                         <div class="card-header bg-white">
                             <h5 class="card-title mb-0 fw-bold">Recent Activity</h5>
-                            </div>
-                            <div class="card-body">
+                        </div>
+                        <div class="card-body">
                             <div class="list-group list-group-flush" id="recentActivity">
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">New booking received</h6>
-                                            <small class="text-muted">Grand Ballroom - Wedding Event</small>
-                                        </div>
-                                        <span class="badge bg-primary">2 hours ago</span>
-                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">New booking received</h6>
+                                        <small class="text-muted">Grand Ballroom - Wedding Event</small>
+                                    </div>
+                                    <span class="badge bg-primary">2 hours ago</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Venues Tab -->
+                </div>
+
+                <!-- Venues Tab -->
                 <div class="tab-pane" id="venues-tab" style="display: none;">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h2 class="fw-bold">My Venues</h2>
-                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold">My Venues</h2>
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal"
+                            data-bs-target="#addVenueModal">
                             <i class="fas fa-plus"></i>
                             <span>Add New Venue</span>
-                            </button>
+                        </button>
+                    </div>
+
+                    <div class="row g-4" id="venuesGrid">
+                        <!-- Venues will be loaded here -->
+                    </div>
+
+                    <div id="noVenues" class="text-center py-5" style="display: none;">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 100px; height: 100px;">
+                            <i class="fas fa-building text-muted fs-1"></i>
                         </div>
-                        
-                        <div class="row g-4" id="venuesGrid">
-                            <!-- Venues will be loaded here -->
-                        </div>
-                        
-                        <div id="noVenues" class="text-center py-5" style="display: none;">
-                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
-                                <i class="fas fa-building text-muted fs-1"></i>
-                            </div>
-                            <h4 class="fw-bold">No venues yet</h4>
-                            <p class="text-muted">Add your first venue to start attracting customers!</p>
-                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal" data-bs-target="#addVenueModal">
+                        <h4 class="fw-bold">No venues yet</h4>
+                        <p class="text-muted">Add your first venue to start attracting customers!</p>
+                        <button class="btn btn-action btn-action-primary" data-bs-toggle="modal"
+                            data-bs-target="#addVenueModal">
                             <i class="fas fa-plus"></i>
                             <span>Add Your First Venue</span>
-                            </button>
-                        </div>
+                        </button>
                     </div>
-                    
-                    <!-- Bookings Tab -->
+                </div>
+
+                <!-- Bookings Tab -->
                 <div class="tab-pane" id="bookings-tab" style="display: none;">
-                        <h2 class="fw-bold mb-4">Recent Bookings</h2>
+                    <h2 class="fw-bold mb-4">Recent Bookings</h2>
                     <div class="card shadow-sm">
-                            <div class="card-body" id="bookingsContainer">
-                                <div id="ownerBookingsList">
-                                    <!-- Owner bookings will be loaded here -->
-                                </div>
-                                <div id="noBookingsMessage" style="display: none;" class="text-center py-4">
-                                    <p class="text-muted">No bookings yet for your venues.</p>
-                                </div>
+                        <div class="card-body" id="bookingsContainer">
+                            <div id="ownerBookingsList">
+                                <!-- Owner bookings will be loaded here -->
+                            </div>
+                            <div id="noBookingsMessage" style="display: none;" class="text-center py-4">
+                                <p class="text-muted">No bookings yet for your venues.</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Analytics Tab -->
+                </div>
+
+                <!-- Analytics Tab -->
                 <div class="tab-pane" id="analytics-tab" style="display: none;">
-                        <h2 class="fw-bold mb-4">Analytics</h2>
+                    <h2 class="fw-bold mb-4">Analytics</h2>
                     <div class="card shadow-sm">
-                            <div class="card-body">
-                                <p class="text-muted">Analytics dashboard coming soon...</p>
+                        <div class="card-body">
+                            <p class="text-muted">Analytics dashboard coming soon...</p>
                         </div>
                     </div>
                 </div>
@@ -701,15 +719,18 @@
                             </div>
                             <div class="col-12">
                                 <label for="venueDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="venueDescription" name="description" rows="3"></textarea>
+                                <textarea class="form-control" id="venueDescription" name="description"
+                                    rows="3"></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label for="venueCapacity" class="form-label">Capacity *</label>
-                                <input type="number" class="form-control" id="venueCapacity" name="capacity" min="1" required>
+                                <input type="number" class="form-control" id="venueCapacity" name="capacity" min="1"
+                                    required>
                             </div>
                             <div class="col-md-6">
                                 <label for="venuePrice" class="form-label">Price (GHS) *</label>
-                                <input type="number" class="form-control" id="venuePrice" name="price" min="0" step="0.01" required>
+                                <input type="number" class="form-control" id="venuePrice" name="price" min="0"
+                                    step="0.01" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="venueContactEmail" class="form-label">Contact Email</label>
@@ -720,8 +741,10 @@
                                 <input type="tel" class="form-control" id="venueContactPhone" name="contact_phone">
                             </div>
                             <div class="col-12">
-                                <label for="venuePhotos" class="form-label">Venue Photos (Multiple images allowed)</label>
-                                <input type="file" class="form-control" id="venuePhotos" name="photos" accept="image/*" multiple>
+                                <label for="venuePhotos" class="form-label">Venue Photos (Multiple images
+                                    allowed)</label>
+                                <input type="file" class="form-control" id="venuePhotos" name="photos" accept="image/*"
+                                    multiple>
                                 <small class="text-muted">You can select up to 10 images. Maximum 5MB per image.</small>
                                 <div id="imagePreview" class="mt-3 d-flex flex-wrap gap-2"></div>
                             </div>
@@ -739,109 +762,145 @@
     <!-- Venue Details Modal with Image Gallery -->
     <div class="modal fade" id="venueDetailsModal" tabindex="-1">
         <div class="modal-dialog modal-xl" style="max-width: 1200px;">
-            <div class="modal-content" style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+            <div class="modal-content"
+                style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
                 <div class="row g-0">
                     <!-- Left Side: Image Gallery / Map -->
                     <div class="col-lg-6">
-                        <div class="modal-header p-0 border-0" style="position: relative; height: 100%; min-height: 500px;">
-                            <div id="venueImageCarousel" class="carousel slide" data-bs-ride="false" style="height: 100%; min-height: 500px; background: #f8f9fa;">
+                        <div class="modal-header p-0 border-0"
+                            style="position: relative; height: 100%; min-height: 500px;">
+                            <div id="venueImageCarousel" class="carousel slide" data-bs-ride="false"
+                                style="height: 100%; min-height: 500px; background: #f8f9fa;">
                                 <div class="carousel-inner" id="venueImageCarouselInner" style="height: 100%;">
                                     <!-- Images and Map will be dynamically added here -->
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#venueImageCarousel" data-bs-slide="prev" style="opacity: 0.9; width: 50px;">
-                                    <span class="carousel-control-prev-icon" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#venueImageCarousel"
+                                    data-bs-slide="prev" style="opacity: 0.9; width: 50px;">
+                                    <span class="carousel-control-prev-icon"
+                                        style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
                                 </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#venueImageCarousel" data-bs-slide="next" style="opacity: 0.9; width: 50px;">
-                                    <span class="carousel-control-next-icon" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
+                                <button class="carousel-control-next" type="button" data-bs-target="#venueImageCarousel"
+                                    data-bs-slide="next" style="opacity: 0.9; width: 50px;">
+                                    <span class="carousel-control-next-icon"
+                                        style="background-color: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px;"></span>
                                 </button>
                             </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" style="position: absolute; top: 15px; right: 15px; z-index: 10; background: white; opacity: 0.9; border-radius: 50%; padding: 8px;"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                style="position: absolute; top: 15px; right: 15px; z-index: 10; background: white; opacity: 0.9; border-radius: 50%; padding: 8px;"></button>
                         </div>
                     </div>
-                    
+
                     <!-- Right Side: Content -->
                     <div class="col-lg-6">
-                        <div class="modal-body p-4" style="height: 100%; min-height: 500px; display: flex; flex-direction: column;">
+                        <div class="modal-body p-4"
+                            style="height: 100%; min-height: 500px; display: flex; flex-direction: column;">
                             <!-- Venue Name and Location -->
                             <div class="mb-3">
-                                <h4 class="mb-2" id="venueDetailsName" style="color: #2c3e50; font-weight: 700; font-size: 26px;"></h4>
+                                <h4 class="mb-2" id="venueDetailsName"
+                                    style="color: #2c3e50; font-weight: 700; font-size: 26px;"></h4>
                                 <p class="text-muted mb-0" style="font-size: 14px;">
                                     <i class="fas fa-map-marker-alt me-2" style="color: #ff6b35;"></i>
                                     <span id="venueDetailsLocationText"></span>
                                 </p>
                             </div>
-                            
+
                             <!-- Key Info Cards -->
                             <div class="row g-3 mb-3">
                                 <div class="col-6">
-                                    <div class="d-flex align-items-center p-2" style="background: #f8f9fa; border-radius: 10px;">
-                                        <div class="me-2" style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                    <div class="d-flex align-items-center p-2"
+                                        style="background: #f8f9fa; border-radius: 10px;">
+                                        <div class="me-2"
+                                            style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
                                             <i class="fas fa-users"></i>
                                         </div>
                                         <div>
-                                            <div class="text-muted" style="font-size: 11px; font-weight: 600; text-transform: uppercase;">Capacity</div>
-                                            <div id="venueDetailsCapacity" style="font-size: 18px; font-weight: 700; color: #2c3e50;"></div>
+                                            <div class="text-muted"
+                                                style="font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                                                Capacity</div>
+                                            <div id="venueDetailsCapacity"
+                                                style="font-size: 18px; font-weight: 700; color: #2c3e50;"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="d-flex align-items-center p-2" style="background: #f8f9fa; border-radius: 10px;">
-                                        <div class="me-2" style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                    <div class="d-flex align-items-center p-2"
+                                        style="background: #f8f9fa; border-radius: 10px;">
+                                        <div class="me-2"
+                                            style="width: 40px; height: 40px; background: #ff6b35; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
                                             <i class="fas fa-money-bill-wave"></i>
                                         </div>
                                         <div>
-                                            <div class="text-muted" style="font-size: 11px; font-weight: 600; text-transform: uppercase;">Price</div>
-                                            <div style="font-size: 18px; font-weight: 700; color: #2c3e50;">GHS <span id="venueDetailsPrice"></span></div>
+                                            <div class="text-muted"
+                                                style="font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                                                Price</div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #2c3e50;">GHS <span
+                                                    id="venueDetailsPrice"></span></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Description -->
                             <div class="mb-3" style="flex: 1;">
-                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Description</h6>
-                                <p id="venueDetailsDescription" class="text-muted mb-0" style="line-height: 1.6; font-size: 14px; max-height: 120px; overflow-y: auto;"></p>
+                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Description
+                                </h6>
+                                <p id="venueDetailsDescription" class="text-muted mb-0"
+                                    style="line-height: 1.6; font-size: 14px; max-height: 120px; overflow-y: auto;"></p>
                             </div>
-                            
+
                             <!-- Contact Information -->
                             <div class="border-top pt-3">
-                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Contact Information</h6>
+                                <h6 class="mb-2" style="color: #2c3e50; font-weight: 600; font-size: 15px;">Contact
+                                    Information</h6>
                                 <div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-map-marker-alt" style="color: #ff6b35; font-size: 14px;"></i>
+                                        <div class="me-2"
+                                            style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-map-marker-alt"
+                                                style="color: #ff6b35; font-size: 14px;"></i>
                                         </div>
                                         <div>
-                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Address</div>
-                                            <div id="venueDetailsAddress" style="color: #2c3e50; font-weight: 500; font-size: 13px;"></div>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Address
+                                            </div>
+                                            <div id="venueDetailsAddress"
+                                                style="color: #2c3e50; font-weight: 500; font-size: 13px;"></div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="d-flex align-items-center mb-2" id="venueDetailsEmailSection" style="display: none !important;">
-                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+
+                                    <div class="d-flex align-items-center mb-2" id="venueDetailsEmailSection"
+                                        style="display: none !important;">
+                                        <div class="me-2"
+                                            style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-envelope" style="color: #ff6b35; font-size: 14px;"></i>
                                         </div>
                                         <div>
-                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Email</div>
-                                            <a href="#" id="venueDetailsEmail" style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Email
+                                            </div>
+                                            <a href="#" id="venueDetailsEmail"
+                                                style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
                                         </div>
                                     </div>
-                                    
-                                    <div class="d-flex align-items-center" id="venueDetailsPhoneSection" style="display: none !important;">
-                                        <div class="me-2" style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+
+                                    <div class="d-flex align-items-center" id="venueDetailsPhoneSection"
+                                        style="display: none !important;">
+                                        <div class="me-2"
+                                            style="width: 35px; height: 35px; background: rgba(255, 107, 53, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-phone" style="color: #ff6b35; font-size: 14px;"></i>
                                         </div>
                                         <div>
-                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Phone</div>
-                                            <a href="#" id="venueDetailsPhone" style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
+                                            <div class="text-muted" style="font-size: 11px; font-weight: 600;">Phone
+                                            </div>
+                                            <a href="#" id="venueDetailsPhone"
+                                                style="color: #ff6b35; text-decoration: none; font-weight: 500; font-size: 13px;"></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Footer Button -->
                             <div class="mt-3 pt-3 border-top">
-                                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary w-100"
+                                    data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -866,15 +925,15 @@
                     </div>
                     <style>
                         /* Hide all Google Maps error messages */
-                        #venueMap > div[style*="color: rgb(51, 51, 51)"],
-                        #venueMap > div[style*="Oops"],
-                        #venueMap > div:has-text("Oops"),
+                        #venueMap>div[style*="color: rgb(51, 51, 51)"],
+                        #venueMap>div[style*="Oops"],
+                        #venueMap>div:has-text("Oops"),
                         #venueMap div[role="alert"],
                         #venueMap div[style*="background-color: white"]:has-text("Something went wrong"),
                         #venueMap div:has-text("This page didn't load Google Maps"),
                         #venueMap div:has-text("See the JavaScript console"),
-                        #venueMap > div > div[style*="position: absolute"]:has-text("Oops"),
-                        #venueMap > div > div[style*="position: absolute"]:has-text("Something went wrong") {
+                        #venueMap>div>div[style*="position: absolute"]:has-text("Oops"),
+                        #venueMap>div>div[style*="position: absolute"]:has-text("Something went wrong") {
                             display: none !important;
                             visibility: hidden !important;
                             opacity: 0 !important;
@@ -896,21 +955,23 @@
     </div>
 
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6ng4nTlBdHg&libraries=places&callback=initGoogleMaps" async defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6ng4nTlBdHg&libraries=places&callback=initGoogleMaps"
+        async defer></script>
     <script>
         // Suppress Google Maps errors
-        window.gm_authFailure = function() {
+        window.gm_authFailure = function () {
             console.log('Google Maps authentication failed - map will still display');
         };
-        
+
         // Initialize Google Maps when loaded
         function initGoogleMaps() {
             console.log('Google Maps API loaded successfully');
             window.googleMapsLoaded = true;
         }
-        
+
         // Global error handler for Google Maps
-        window.addEventListener('error', function(e) {
+        window.addEventListener('error', function (e) {
             if (e.message && e.message.includes('Google Maps')) {
                 e.preventDefault();
                 console.log('Google Maps error suppressed:', e.message);
@@ -921,7 +982,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         const API_BASE = 'http://localhost:3000/api';
         let venueMap = null;
@@ -932,7 +993,7 @@
         let editingVenueId = null;
 
         // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadUserData();
             setupNavigation();
             loadVenues();
@@ -943,20 +1004,20 @@
 
         function setupNavigation() {
             document.querySelectorAll('.nav-link[data-tab]').forEach(link => {
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                     e.preventDefault();
                     const tabName = this.getAttribute('data-tab');
-                    
+
                     // Update active nav link
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Show/hide tabs
                     document.querySelectorAll('.tab-pane').forEach(tab => {
                         tab.style.display = 'none';
                         tab.classList.remove('active');
                     });
-                    
+
                     const targetTab = document.getElementById(tabName + '-tab');
                     if (targetTab) {
                         targetTab.style.display = 'block';
@@ -975,7 +1036,7 @@
             let greeting = 'Good morning';
             if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
             else if (hour >= 17) greeting = 'Good evening';
-            
+
             const greetingEl = document.getElementById('greeting');
             if (greetingEl && currentUser) {
                 greetingEl.textContent = `${greeting}, ${currentUser.name}! Track your venues and bookings.`;
@@ -1031,15 +1092,15 @@
                 } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
                     images = [venue.photoUrl];
                 }
-                
+
                 // Default placeholder if no images
                 if (images.length === 0) {
                     images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'];
                 }
-                
+
                 const hasMultipleImages = images.length > 1;
                 const carouselId = `venueCarousel${venueIndex}`;
-                
+
                 // Build image HTML
                 let imageHtml = '';
                 if (hasMultipleImages) {
@@ -1048,15 +1109,15 @@
                         <div id="${carouselId}" class="carousel slide" data-bs-ride="false" style="height: 200px; position: relative;">
                             <div class="carousel-inner" style="height: 100%; border-radius: 12px 12px 0 0; overflow: hidden;">
                                 ${images.map((imgUrl, imgIndex) => {
-                                    const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
-                                                       imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
-                                                       `http://localhost:3000/${imgUrl}`;
-                                    return `
+                        const fullImageUrl = imgUrl.startsWith('http') ? imgUrl :
+                            imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` :
+                                `http://localhost:3000/${imgUrl}`;
+                        return `
                                         <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}" style="height: 200px;">
                                             <img src="${fullImageUrl}" class="d-block w-100" style="height: 100%; object-fit: cover;" alt="Venue image ${imgIndex + 1}" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'">
                                         </div>
                                     `;
-                                }).join('')}
+                    }).join('')}
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="opacity: 0.7; width: 40px;">
                                 <span class="carousel-control-prev-icon"></span>
@@ -1068,15 +1129,15 @@
                     `;
                 } else {
                     // Single image (no carousel)
-                    const fullImageUrl = images[0].startsWith('http') ? images[0] : 
-                                       images[0].startsWith('/') ? `http://localhost:3000${images[0]}` : 
-                                       `http://localhost:3000/${images[0]}`;
+                    const fullImageUrl = images[0].startsWith('http') ? images[0] :
+                        images[0].startsWith('/') ? `http://localhost:3000${images[0]}` :
+                            `http://localhost:3000/${images[0]}`;
                     imageHtml = `
                         <div style="height: 200px; background-image: url('${fullImageUrl}'); background-size: cover; background-position: center; border-radius: 12px 12px 0 0; position: relative;">
                         </div>
                     `;
                 }
-                
+
                 return `
                 <div class="col-lg-6">
                     <div class="card h-100 shadow-sm">
@@ -1093,26 +1154,23 @@
                                     font-size: 13px;
                                     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                                     backdrop-filter: blur(8px);
-                                    background: ${
-                                        venue.venueStatus === 'active' ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' :
-                                        venue.venueStatus === 'unavailable' ? 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)' :
-                                        'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
-                                    };
-                                    color: ${
-                                        venue.venueStatus === 'unavailable' ? '#000' : '#fff'
-                                    };
+                                    background: ${venue.venueStatus === 'active' ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' :
+                        venue.venueStatus === 'unavailable' ? 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)' :
+                            'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
+                    };
+                                    color: ${venue.venueStatus === 'unavailable' ? '#000' : '#fff'
+                    };
                                     text-transform: uppercase;
                                     letter-spacing: 0.5px;
                                     transition: all 0.3s ease;
                                 ">
-                                    <i class="fas ${
-                                        venue.venueStatus === 'active' ? 'fa-check-circle' :
-                                        venue.venueStatus === 'unavailable' ? 'fa-clock' :
-                                        'fa-times-circle'
-                                    }" style="font-size: 14px;"></i>
+                                    <i class="fas ${venue.venueStatus === 'active' ? 'fa-check-circle' :
+                        venue.venueStatus === 'unavailable' ? 'fa-clock' :
+                            'fa-times-circle'
+                    }" style="font-size: 14px;"></i>
                                     <span>${venue.venueStatus === 'active' ? 'Active' :
-                                          venue.venueStatus === 'unavailable' ? 'Closed' :
-                                          'Inactive'}</span>
+                        venue.venueStatus === 'unavailable' ? 'Closed' :
+                            'Inactive'}</span>
                                 </span>
                             </div>
                         </div>
@@ -1302,7 +1360,7 @@
                     const now = new Date();
                     const diffMs = now - created;
                     const diffMins = Math.floor(diffMs / (1000 * 60));
-                    const timeLabel = diffMins < 60 ? `${diffMins}m ago` : `${Math.floor(diffMins/60)}h ago`;
+                    const timeLabel = diffMins < 60 ? `${diffMins}m ago` : `${Math.floor(diffMins / 60)}h ago`;
 
                     return `
                         <div class="list-group-item d-flex justify-content-between align-items-center" style="cursor:pointer;" onclick="openBooking('${b._id}')">
@@ -1508,7 +1566,7 @@
 
                 if (response.ok) {
                     const venue = data.venue;
-                    
+
                     // Set venue details
                     document.getElementById('venueDetailsName').textContent = venue.name;
                     document.getElementById('venueDetailsLocationText').textContent = venue.location;
@@ -1516,7 +1574,7 @@
                     document.getElementById('venueDetailsCapacity').textContent = venue.capacity + ' guests';
                     document.getElementById('venueDetailsPrice').textContent = venue.price;
                     document.getElementById('venueDetailsAddress').textContent = venue.location;
-                    
+
                     // Handle contact information
                     if (venue.contactEmail) {
                         document.getElementById('venueDetailsEmail').textContent = venue.contactEmail;
@@ -1525,7 +1583,7 @@
                     } else {
                         document.getElementById('venueDetailsEmailSection').style.display = 'none';
                     }
-                    
+
                     if (venue.contactPhone) {
                         document.getElementById('venueDetailsPhone').textContent = venue.contactPhone;
                         document.getElementById('venueDetailsPhone').href = `tel:${venue.contactPhone}`;
@@ -1533,11 +1591,11 @@
                     } else {
                         document.getElementById('venueDetailsPhoneSection').style.display = 'none';
                     }
-                    
+
                     // Set images gallery
                     const carouselInner = document.getElementById('venueImageCarouselInner');
                     carouselInner.innerHTML = '';
-                    
+
                     // Get all images (photoUrls array or fallback to photoUrl)
                     let images = [];
                     if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
@@ -1547,27 +1605,27 @@
                     } else {
                         images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80'];
                     }
-                    
+
                     console.log('Venue images:', images);
-                    
+
                     if (images.length === 0) {
                         images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80'];
                     }
-                    
+
                     images.forEach((imgUrl, index) => {
                         // Construct full URL if needed
                         let fullImageUrl = imgUrl;
                         if (!imgUrl.startsWith('http')) {
                             fullImageUrl = imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : `http://localhost:3000/${imgUrl}`;
                         }
-                        
+
                         console.log(`Loading image ${index + 1}:`, fullImageUrl);
-                        
+
                         const carouselItem = document.createElement('div');
                         carouselItem.className = `carousel-item ${index === 0 ? 'active' : ''}`;
                         carouselItem.style.height = '100%';
                         carouselItem.style.minHeight = '500px';
-                        
+
                         const img = document.createElement('img');
                         img.src = fullImageUrl;
                         img.className = 'd-block w-100 h-100';
@@ -1576,18 +1634,18 @@
                         img.style.width = '100%';
                         img.style.minHeight = '500px';
                         img.alt = `${venue.name} - Image ${index + 1}`;
-                        img.onload = function() {
+                        img.onload = function () {
                             console.log(`Image ${index + 1} loaded successfully`);
                         };
-                        img.onerror = function() {
+                        img.onerror = function () {
                             console.error(`Failed to load image ${index + 1}:`, fullImageUrl);
                             this.src = 'https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=800&q=80';
                         };
-                        
+
                         carouselItem.appendChild(img);
                         carouselInner.appendChild(carouselItem);
                     });
-                    
+
                     // Add map as the last carousel item
                     const mapCarouselItem = document.createElement('div');
                     mapCarouselItem.className = 'carousel-item';
@@ -1595,22 +1653,22 @@
                     mapCarouselItem.style.minHeight = '500px';
                     mapCarouselItem.style.position = 'relative';
                     mapCarouselItem.id = 'venueDetailsMapContainer';
-                    
+
                     const mapDiv = document.createElement('div');
                     mapDiv.id = 'venueDetailsMap';
                     mapDiv.style.width = '100%';
                     mapDiv.style.height = '100%';
                     mapDiv.style.minHeight = '500px';
-                    
+
                     mapCarouselItem.appendChild(mapDiv);
                     carouselInner.appendChild(mapCarouselItem);
-                    
+
                     // Show modal first, then initialize carousel and map
                     const modal = new bootstrap.Modal(document.getElementById('venueDetailsModal'));
                     modal.show();
-                    
+
                     // Initialize carousel and map after modal is shown
-                    document.getElementById('venueDetailsModal').addEventListener('shown.bs.modal', function() {
+                    document.getElementById('venueDetailsModal').addEventListener('shown.bs.modal', function () {
                         const carousel = document.getElementById('venueImageCarousel');
                         if (carousel) {
                             const bsCarousel = new bootstrap.Carousel(carousel, {
@@ -1618,14 +1676,14 @@
                                 wrap: true
                             });
                         }
-                        
+
                         // Initialize map when map carousel item is shown
                         const initializeMapInCarousel = () => {
                             if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
                                 console.log('Google Maps not loaded yet');
                                 return;
                             }
-                            
+
                             const mapContainer = document.getElementById('venueDetailsMap');
                             if (mapContainer && !venueDetailsMap) {
                                 try {
@@ -1636,14 +1694,14 @@
                                         streetViewControl: true,
                                         fullscreenControl: true
                                     });
-                                    
+
                                     // Geocode venue location
                                     const geocoder = new google.maps.Geocoder();
                                     geocoder.geocode({ address: venue.location + ', Ghana' }, (results, status) => {
                                         if (status === 'OK' && results[0] && venueDetailsMap) {
                                             const location = results[0].geometry.location;
                                             venueDetailsMap.setCenter(location);
-                                            
+
                                             // Add marker
                                             if (venueDetailsMarker) {
                                                 venueDetailsMarker.setMap(null);
@@ -1661,15 +1719,15 @@
                                 }
                             }
                         };
-                        
+
                         // Watch for when map carousel item becomes active
-                        carousel.addEventListener('slid.bs.carousel', function(e) {
+                        carousel.addEventListener('slid.bs.carousel', function (e) {
                             const activeItem = e.relatedTarget;
                             if (activeItem && activeItem.id === 'venueDetailsMapContainer') {
                                 setTimeout(initializeMapInCarousel, 100);
                             }
                         });
-                        
+
                         // Also check on initial load if map is visible
                         const checkMapVisibility = () => {
                             const mapContainer = document.getElementById('venueDetailsMapContainer');
@@ -1701,15 +1759,15 @@
         async function editVenue(venueId) {
             editingVenueId = venueId;
             document.getElementById('modalTitle').textContent = 'Edit Venue';
-            
+
             try {
                 // Fetch venue data
                 const response = await fetch(`${API_BASE}/venues/${venueId}`);
                 const data = await response.json();
-                
+
                 if (response.ok && data.venue) {
                     const venue = data.venue;
-                    
+
                     // Populate form fields
                     document.getElementById('venueName').value = venue.name || '';
                     document.getElementById('venueLocation').value = venue.location || '';
@@ -1719,11 +1777,11 @@
                     document.getElementById('venuePrice').value = venue.price || '';
                     document.getElementById('venueContactEmail').value = venue.contactEmail || '';
                     document.getElementById('venueContactPhone').value = venue.contactPhone || '';
-                    
+
                     // Clear existing previews and selected files
                     selectedFiles = [];
                     document.getElementById('imagePreview').innerHTML = '';
-                    
+
                     // Load existing images into preview
                     let existingImages = [];
                     if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
@@ -1731,14 +1789,14 @@
                     } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
                         existingImages = [venue.photoUrl];
                     }
-                    
+
                     // Display existing images in preview
                     if (existingImages.length > 0) {
                         existingImages.forEach((imgUrl, index) => {
-                            const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
-                                               imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
-                                               `http://localhost:3000/${imgUrl}`;
-                            
+                            const fullImageUrl = imgUrl.startsWith('http') ? imgUrl :
+                                imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` :
+                                    `http://localhost:3000/${imgUrl}`;
+
                             const imgDiv = document.createElement('div');
                             imgDiv.className = 'position-relative';
                             imgDiv.style.width = '120px';
@@ -1749,13 +1807,13 @@
                             imgDiv.dataset.index = index;
                             imgDiv.dataset.isExisting = 'true';
                             imgDiv.dataset.url = imgUrl;
-                            
+
                             const img = document.createElement('img');
                             img.src = fullImageUrl;
                             img.style.width = '100%';
                             img.style.height = '100%';
                             img.style.objectFit = 'cover';
-                            
+
                             const removeBtn = document.createElement('button');
                             removeBtn.type = 'button';
                             removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
@@ -1764,21 +1822,21 @@
                             removeBtn.style.padding = '0';
                             removeBtn.style.borderRadius = '50%';
                             removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-                            removeBtn.onclick = function() {
+                            removeBtn.onclick = function () {
                                 // Remove from existing images
                                 existingImages.splice(index, 1);
                                 imgDiv.remove();
                             };
-                            
+
                             imgDiv.appendChild(img);
                             imgDiv.appendChild(removeBtn);
                             document.getElementById('imagePreview').appendChild(imgDiv);
-                            
+
                             // Store existing image URL in selectedFiles for reference
                             selectedFiles.push({ isExisting: true, url: imgUrl });
                         });
                     }
-                    
+
                     // Show modal
                     const modal = new bootstrap.Modal(document.getElementById('addVenueModal'));
                     modal.show();
@@ -1805,15 +1863,15 @@
             document.getElementById('mapModalTitle').textContent = venueName;
             document.getElementById('venueNameMap').textContent = venueName;
             document.getElementById('venueLocationMap').textContent = venueLocation;
-            
+
             // Create Google Maps directions link
             const encodedLocation = encodeURIComponent(venueLocation);
             document.getElementById('directionsLink').href = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
-            
+
             // Initialize or update map
             const modal = new bootstrap.Modal(document.getElementById('mapModal'));
             modal.show();
-            
+
             // Wait for modal to be shown before initializing map
             document.getElementById('mapModal').addEventListener('shown.bs.modal', function initializeMap() {
                 // Continuously hide error messages
@@ -1824,8 +1882,8 @@
                         const allDivs = mapContainer.querySelectorAll('div');
                         allDivs.forEach(div => {
                             const text = div.textContent || div.innerText || '';
-                            if (text.includes('Oops') || 
-                                text.includes('Something went wrong') || 
+                            if (text.includes('Oops') ||
+                                text.includes('Something went wrong') ||
                                 text.includes('didn\'t load Google Maps') ||
                                 text.includes('See the JavaScript console')) {
                                 div.style.display = 'none';
@@ -1842,10 +1900,10 @@
                         });
                     }
                 }, 100);
-                
+
                 // Stop hiding errors after 5 seconds
                 setTimeout(() => clearInterval(hideErrors), 5000);
-                
+
                 // Check if Google Maps is loaded
                 if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
                     console.log('Google Maps not loaded yet, will retry...');
@@ -1857,7 +1915,7 @@
                     }, 500);
                     return;
                 }
-                
+
                 try {
                     if (!venueMap) {
                         // Initialize map centered on Ghana (Accra)
@@ -1869,55 +1927,55 @@
                             fullscreenControl: true
                         });
                     }
-                    
+
                     // Geocode the venue location
                     const geocoder = new google.maps.Geocoder();
                     geocoder.geocode({ address: venueLocation }, (results, status) => {
-                    if (status === 'OK' && results[0]) {
-                        const location = results[0].geometry.location;
-                        
-                        // Center map on venue location
-                        venueMap.setCenter(location);
-                        
-                        // Remove existing marker if any
-                        if (venueMarker) {
-                            venueMarker.setMap(null);
-                        }
-                        
-                        // Add marker for venue
-                        venueMarker = new google.maps.Marker({
-                            position: location,
-                            map: venueMap,
-                            title: venueName,
-                            animation: google.maps.Animation.DROP
-                        });
-                        
-                        // Add info window
-                        const infoWindow = new google.maps.InfoWindow({
-                            content: `
+                        if (status === 'OK' && results[0]) {
+                            const location = results[0].geometry.location;
+
+                            // Center map on venue location
+                            venueMap.setCenter(location);
+
+                            // Remove existing marker if any
+                            if (venueMarker) {
+                                venueMarker.setMap(null);
+                            }
+
+                            // Add marker for venue
+                            venueMarker = new google.maps.Marker({
+                                position: location,
+                                map: venueMap,
+                                title: venueName,
+                                animation: google.maps.Animation.DROP
+                            });
+
+                            // Add info window
+                            const infoWindow = new google.maps.InfoWindow({
+                                content: `
                                 <div style="padding: 10px;">
                                     <h6 style="margin: 0 0 5px 0; font-weight: bold;">${venueName}</h6>
                                     <p style="margin: 0; color: #666;">${venueLocation}</p>
                                 </div>
                             `
-                        });
-                        
-                        venueMarker.addListener('click', () => {
+                            });
+
+                            venueMarker.addListener('click', () => {
+                                infoWindow.open(venueMap, venueMarker);
+                            });
+
+                            // Open info window by default
                             infoWindow.open(venueMap, venueMarker);
-                        });
-                        
-                        // Open info window by default
-                        infoWindow.open(venueMap, venueMarker);
-                    } else {
-                        console.log('Geocoding failed:', status);
-                        // Don't show error, map will still be visible with default location
-                    }
-                });
+                        } else {
+                            console.log('Geocoding failed:', status);
+                            // Don't show error, map will still be visible with default location
+                        }
+                    });
                 } catch (error) {
                     console.log('Map initialization error (suppressed):', error);
                     // Map container will still be visible
                 }
-                
+
                 // Remove event listener after first use
                 document.getElementById('mapModal').removeEventListener('shown.bs.modal', initializeMap);
             }, { once: true });
@@ -1979,24 +2037,24 @@
         // Toggle venue status
         async function toggleVenueStatus(venueId, currentStatus) {
             const statusOptions = [
-                { 
-                    value: 'active', 
+                {
+                    value: 'active',
                     label: 'Active',
                     description: 'Bookings allowed',
                     icon: 'fa-check-circle',
                     color: '#28a745',
                     bgColor: '#e8f5e9'
                 },
-                { 
-                    value: 'unavailable', 
+                {
+                    value: 'unavailable',
                     label: 'Temporarily Closed',
                     description: 'No new bookings',
                     icon: 'fa-ban',
                     color: '#ffc107',
                     bgColor: '#fff8e1'
                 },
-                { 
-                    value: 'inactive', 
+                {
+                    value: 'inactive',
                     label: 'Inactive',
                     description: 'Hidden from search',
                     icon: 'fa-times-circle',
@@ -2158,7 +2216,7 @@
                     { value: 'inactive', color: '#dc3545', bgColor: '#ffebee' }
                 ];
                 const option = statusOptions.find(o => o.value === cardStatus);
-                
+
                 if (cardStatus === status) {
                     card.style.borderColor = option.color;
                     card.style.backgroundColor = option.bgColor;
@@ -2185,7 +2243,7 @@
         }
 
         // Handle form submission
-        document.getElementById('venueForm').addEventListener('submit', async function(e) {
+        document.getElementById('venueForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const formData = new FormData();
@@ -2207,10 +2265,10 @@
             }
 
             try {
-                const url = editingVenueId ? 
-                    `${API_BASE}/venues/${editingVenueId}` : 
+                const url = editingVenueId ?
+                    `${API_BASE}/venues/${editingVenueId}` :
                     `${API_BASE}/venues`;
-                
+
                 const method = editingVenueId ? 'PUT' : 'POST';
 
                 const response = await fetch(url, {
@@ -2245,7 +2303,7 @@
                             return err.msg || err.message || JSON.stringify(err);
                         }).join('<br>');
                     }
-                    
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -2276,15 +2334,15 @@
 
         // Store selected files to preserve them when adding new ones
         let selectedFiles = [];
-        
+
         // Reset modal when closed
-        document.getElementById('addVenueModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('addVenueModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('venueForm').reset();
             document.getElementById('modalTitle').textContent = 'Add New Venue';
             document.getElementById('imagePreview').innerHTML = '';
             selectedFiles = [];
             editingVenueId = null;
-            
+
             // Clear all form fields explicitly
             document.getElementById('venueName').value = '';
             document.getElementById('venueLocation').value = '';
@@ -2296,16 +2354,16 @@
             document.getElementById('venueContactPhone').value = '';
             document.getElementById('venuePhotos').value = '';
         });
-        
+
         // Function to update preview from files array
         function updateImagePreview(files) {
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = '';
-            
+
             files.forEach((file, index) => {
                 if (file instanceof File && file.type && file.type.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const imgDiv = document.createElement('div');
                         imgDiv.className = 'position-relative';
                         imgDiv.style.width = '120px';
@@ -2314,13 +2372,13 @@
                         imgDiv.style.overflow = 'hidden';
                         imgDiv.style.border = '2px solid #e9ecef';
                         imgDiv.dataset.index = index;
-                        
+
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.objectFit = 'cover';
-                        
+
                         const removeBtn = document.createElement('button');
                         removeBtn.type = 'button';
                         removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
@@ -2329,7 +2387,7 @@
                         removeBtn.style.padding = '0';
                         removeBtn.style.borderRadius = '50%';
                         removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-                        removeBtn.onclick = function() {
+                        removeBtn.onclick = function () {
                             // Remove file from selectedFiles array
                             selectedFiles.splice(index, 1);
                             // Update file input
@@ -2343,7 +2401,7 @@
                             // Update preview
                             updateImagePreview(selectedFiles);
                         };
-                        
+
                         imgDiv.appendChild(img);
                         imgDiv.appendChild(removeBtn);
                         preview.appendChild(imgDiv);
@@ -2352,11 +2410,11 @@
                 }
             });
         }
-        
+
         // Image preview functionality - preserve existing files when adding new ones
-        document.getElementById('venuePhotos').addEventListener('change', function(e) {
+        document.getElementById('venuePhotos').addEventListener('change', function (e) {
             const newFiles = Array.from(e.target.files);
-            
+
             // Check total count
             if (selectedFiles.length + newFiles.length > 10) {
                 Swal.fire({
@@ -2375,7 +2433,7 @@
                 document.getElementById('venuePhotos').files = dt.files;
                 return;
             }
-            
+
             // Add new files to existing ones (avoid duplicates)
             newFiles.forEach(newFile => {
                 // Check if file is not already in selectedFiles
@@ -2385,12 +2443,12 @@
                     }
                     return false;
                 });
-                
+
                 if (!isDuplicate) {
                     selectedFiles.push(newFile);
                 }
             });
-            
+
             // Update file input with all selected files
             const dt = new DataTransfer();
             selectedFiles.forEach(f => {
@@ -2399,7 +2457,7 @@
                 }
             });
             document.getElementById('venuePhotos').files = dt.files;
-            
+
             // Update preview
             updateImagePreview(selectedFiles);
         });
@@ -2407,4 +2465,5 @@
     <!-- Theme Toggle Script -->
     <script src="../scripts/theme-toggle.js"></script>
 </body>
+
 </html>
