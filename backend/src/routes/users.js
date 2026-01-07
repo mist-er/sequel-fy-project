@@ -55,3 +55,4 @@ router.delete('/:userId/favorites/:venueId', UserController.removeFromFavorites)
 router.get('/:userId/favorites', UserController.getFavorites);
 
 module.exports = router;
+

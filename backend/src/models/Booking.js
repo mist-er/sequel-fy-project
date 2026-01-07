@@ -20,7 +20,11 @@ const bookingSchema = new mongoose.Schema({
   },
   eventDate: {
     type: Date,
-    required: [true, 'Event date is required']
+    required: [true, 'Start date is required']
+  },
+  endDate: {
+    type: Date,
+    required: [true, 'End date is required']
   },
   startTime: {
     type: String,
@@ -46,6 +50,16 @@ const bookingSchema = new mongoose.Schema({
     trim: true,
     default: ''
   },
+  paystackReference: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['none', 'paypal', 'paystack', 'cash'],
+    default: 'none'
+  },
   paymentDate: {
     type: Date
   },
@@ -61,6 +75,11 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     trim: true,
     maxlength: [500, 'Notes cannot exceed 500 characters']
+  },
+  guestCount: {
+    type: Number,
+    default: 1,
+    min: [1, 'Must have at least 1 guest']
   }
 }, {
   timestamps: true,
@@ -92,11 +111,11 @@ bookingSchema.virtual('organizerInfo', {
 });
 
 // Validation to ensure end time is after start time
-bookingSchema.pre('save', function(next) {
+bookingSchema.pre('save', function (next) {
   if (this.startTime && this.endTime) {
     const start = new Date(`2000-01-01T${this.startTime}:00`);
     const end = new Date(`2000-01-01T${this.endTime}:00`);
-    
+
     if (end <= start) {
       return next(new Error('End time must be after start time'));
     }
