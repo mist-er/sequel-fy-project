@@ -353,6 +353,121 @@ class UserController {
       });
     }
   }
+
+  // Add venue to favorites
+  static async addToFavorites(req, res) {
+    try {
+      const { userId, venueId } = req.params;
+
+      // Check if user exists
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+
+      // Check if venue exists
+      const Venue = require('../models/Venue');
+      const venue = await Venue.findById(venueId);
+      if (!venue) {
+        return res.status(404).json({
+          message: 'Venue not found'
+        });
+      }
+
+      // Check if already in favorites
+      if (user.favorites.includes(venueId)) {
+        return res.status(400).json({
+          message: 'Venue is already in favorites'
+        });
+      }
+
+      // Add to favorites
+      user.favorites.push(venueId);
+      await user.save();
+
+      // Populate favorites for response
+      await user.populate('favorites');
+
+      res.json({
+        message: 'Venue added to favorites successfully',
+        favorites: user.favorites
+      });
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      res.status(500).json({
+        message: 'Error adding to favorites',
+        error: error.message
+      });
+    }
+  }
+
+  // Remove venue from favorites
+  static async removeFromFavorites(req, res) {
+    try {
+      const { userId, venueId } = req.params;
+
+      // Check if user exists
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+
+      // Remove from favorites
+      if (!user.favorites.includes(venueId)) {
+        return res.status(400).json({
+          message: 'Venue is not in favorites'
+        });
+      }
+
+      user.favorites = user.favorites.filter(id => id.toString() !== venueId);
+      await user.save();
+
+      // Populate favorites for response
+      await user.populate('favorites');
+
+      res.json({
+        message: 'Venue removed from favorites successfully',
+        favorites: user.favorites
+      });
+    } catch (error) {
+      console.error('Error removing from favorites:', error);
+      res.status(500).json({
+        message: 'Error removing from favorites',
+        error: error.message
+      });
+    }
+  }
+
+  // Get user's favorite venues
+  static async getFavorites(req, res) {
+    try {
+      const { userId } = req.params;
+
+      // Check if user exists
+      const user = await User.findById(userId).populate('favorites');
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+
+      res.json({
+        message: 'Favorites retrieved successfully',
+        favorites: user.favorites,
+        count: user.favorites.length
+      });
+    } catch (error) {
+      console.error('Error retrieving favorites:', error);
+      res.status(500).json({
+        message: 'Error retrieving favorites',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = UserController;

@@ -627,10 +627,8 @@
                 <!-- Favorites Tab -->
                 <div class="tab-pane" id="favorites-tab" style="display: none;">
                     <h2 class="fw-bold mb-4">Favorite Venues</h2>
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <p class="text-muted">Favorites feature coming soon...</p>
-                        </div>
+                    <div class="row g-4" id="favoritesGrid">
+                        <!-- Favorite venues will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -974,6 +972,7 @@
             setupNavigation();
             loadVenues();
             loadBookings();
+            loadUserFavorites();
             updateGreeting();
         });
 
@@ -997,6 +996,11 @@
                     if (targetTab) {
                         targetTab.style.display = 'block';
                         targetTab.classList.add('active');
+                        
+                        // Load favorites when favorites tab is clicked
+                        if (tabName === 'favorites') {
+                            loadFavorites();
+                        }
                     }
                 });
             });
@@ -1114,6 +1118,28 @@
                     <div class="venue-card">
                         <div class="position-relative" style="height: 200px;">
                             ${imageHtml}
+                            <!-- Favorite Button Top-Left -->
+                            <button class="favorite-btn" onclick="toggleFavorite('${venue._id}', this)" data-venue-id="${venue._id}" style="
+                                position: absolute;
+                                top: 12px;
+                                left: 12px;
+                                z-index: 10;
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 50%;
+                                border: none;
+                                background: white;
+                                color: #ff6b35;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 20px;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                            " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.15)'">
+                                <i class="fas fa-heart favorite-icon" style="font-size: 16px;"></i>
+                            </button>
                             <div class="position-absolute top-0 end-0 m-3" style="z-index: 5;">
                                 <span style="
                                     display: inline-flex;
@@ -1829,6 +1855,340 @@
                     `<option value="${status.value}">${status.label}</option>`
                 ).join('');
             }
+        }
+
+        // Favorite management functions
+        let favoriteVenues = new Set(); // To track which venues are favorited
+        let userFavoritesLoaded = false;
+
+        // Load user's favorite venues
+        async function loadUserFavorites() {
+            if (!currentUser || !currentUser._id) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/users/${currentUser._id}/favorites`);
+                const data = await response.json();
+                
+                if (response.ok && data.favorites) {
+                    // Store favorite IDs in a Set for quick lookup
+                    favoriteVenues = new Set(data.favorites.map(v => v._id));
+                    userFavoritesLoaded = true;
+                    
+                    // Update UI to show which venues are favorited
+                    updateFavoriteButtons();
+                }
+            } catch (error) {
+                console.error('Error loading favorites:', error);
+            }
+        }
+
+        // Update favorite button states in the UI
+        function updateFavoriteButtons() {
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const venueId = btn.getAttribute('data-venue-id');
+                if (favoriteVenues.has(venueId)) {
+                    btn.classList.add('favorited');
+                    // Filled red heart for favorited
+                    const icon = btn.querySelector('.favorite-icon');
+                    if (icon) {
+                        icon.style.color = '#ff1744';
+                        icon.style.opacity = '1';
+                    }
+                } else {
+                    btn.classList.remove('favorited');
+                    // Outlined orange heart for not favorited
+                    const icon = btn.querySelector('.favorite-icon');
+                    if (icon) {
+                        icon.style.color = '#ff6b35';
+                        icon.style.opacity = '0.7';
+                    }
+                }
+            });
+        }
+
+        // Toggle favorite status of a venue
+        async function toggleFavorite(venueId, btnElement) {
+            if (!currentUser || !currentUser._id) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please Log In',
+                    text: 'You need to be logged in to add favorites.',
+                    confirmButtonColor: '#ff6b35'
+                });
+                return;
+            }
+
+            try {
+                const isFavorited = favoriteVenues.has(venueId);
+                const method = isFavorited ? 'DELETE' : 'POST';
+                const endpoint = `${API_BASE}/users/${currentUser._id}/favorites/${venueId}`;
+
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Update local state
+                    if (isFavorited) {
+                        favoriteVenues.delete(venueId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Removed',
+                            text: 'Venue removed from favorites.',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            confirmButtonColor: '#ff6b35'
+                        });
+                    } else {
+                        favoriteVenues.add(venueId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Added to Favorites!',
+                            text: 'Venue has been added to your favorites.',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            confirmButtonColor: '#ff6b35'
+                        });
+                    }
+
+                    // Update the button UI
+                    updateFavoriteButtons();
+                    
+                    // Refresh favorites tab if it's open
+                    if (document.getElementById('favorites-tab').style.display !== 'none') {
+                        loadFavorites();
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to update favorite status.',
+                        confirmButtonColor: '#ff6b35'
+                    });
+                }
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Unable to update favorite status. Please try again.',
+                    confirmButtonColor: '#ff6b35'
+                });
+            }
+        }
+
+        // Load and display favorite venues
+        async function loadFavorites() {
+            try {
+                const response = await fetch(`${API_BASE}/users/${currentUser._id}/favorites`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayFavoriteVenues(data.favorites);
+                } else {
+                    console.error('Error loading favorites:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Display favorite venues in favorites tab
+        function displayFavoriteVenues(favorites) {
+            const favoritesTab = document.getElementById('favorites-tab');
+            const favoritesGrid = document.getElementById('favoritesGrid');
+
+            if (favorites.length === 0) {
+                favoritesGrid.innerHTML = `
+                    <div class="text-center py-5 w-100">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                            <i class="fas fa-heart text-muted fs-1"></i>
+                        </div>
+                        <h4 class="fw-bold">No favorite venues yet</h4>
+                        <p class="text-muted">Start adding venues to your favorites by clicking the heart icon on any venue!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Create venue cards for favorites (similar to browse venues)
+            const venueCardsHtml = favorites.map((venue, venueIndex) => {
+                let images = [];
+                if (venue.photoUrls && Array.isArray(venue.photoUrls) && venue.photoUrls.length > 0) {
+                    images = venue.photoUrls.filter(url => url && url.trim() !== '');
+                } else if (venue.photoUrl && venue.photoUrl.trim() !== '') {
+                    images = [venue.photoUrl];
+                }
+                
+                if (images.length === 0) {
+                    images = ['https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'];
+                }
+                
+                const hasMultipleImages = images.length > 1;
+                const carouselId = `favoriteVenueCarousel${venueIndex}`;
+                
+                let imageHtml = '';
+                if (hasMultipleImages) {
+                    imageHtml = `
+                        <div id="${carouselId}" class="carousel slide" data-bs-ride="false" style="height: 200px; position: relative;">
+                            <div class="carousel-inner" style="height: 100%; border-radius: 12px 12px 0 0; overflow: hidden;">
+                                ${images.map((imgUrl, imgIndex) => {
+                                    const fullImageUrl = imgUrl.startsWith('http') ? imgUrl : 
+                                                       imgUrl.startsWith('/') ? `http://localhost:3000${imgUrl}` : 
+                                                       `http://localhost:3000/${imgUrl}`;
+                                    return `
+                                        <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}" style="height: 200px;">
+                                            <img src="${fullImageUrl}" class="d-block w-100" style="height: 100%; object-fit: cover;" alt="${venue.name}" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f1426e4b1e?auto=format&fit=crop&w=400&q=80'">
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" style="opacity: 0.7; width: 40px;">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    const fullImageUrl = images[0].startsWith('http') ? images[0] : 
+                                       images[0].startsWith('/') ? `http://localhost:3000${images[0]}` : 
+                                       `http://localhost:3000/${images[0]}`;
+                    imageHtml = `
+                        <div class="venue-image" style="background-image: url('${fullImageUrl}'); height: 200px; background-size: cover; background-position: center; border-radius: 12px 12px 0 0; position: relative;">
+                        </div>
+                    `;
+                }
+                
+                return `
+                <div class="col-lg-6">
+                    <div class="venue-card">
+                        <div class="position-relative" style="height: 200px;">
+                            ${imageHtml}
+                            <!-- Favorite Button Top-Left -->
+                            <button class="favorite-btn" onclick="toggleFavorite('${venue._id}', this)" data-venue-id="${venue._id}" style="
+                                position: absolute;
+                                top: 12px;
+                                left: 12px;
+                                z-index: 10;
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 50%;
+                                border: none;
+                                background: white;
+                                color: #ff1744;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 20px;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                            " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.15)'">
+                                <i class="fas fa-heart favorite-icon" style="font-size: 16px; color: #ff1744;"></i>
+                            </button>
+                            <div class="position-absolute bottom-0 end-0 m-3" style="z-index: 5; display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                <i class="fas fa-tag" style="color: #ff6b35; font-size: 14px;"></i>
+                                <span style="font-weight: 700; font-size: 16px; color: #2c3e50;">GHS ${venue.price}</span>
+                            </div>
+                        </div>
+                        <div class="card-body card-padding">
+                            <h5 class="card-title">${venue.name}</h5>
+                            <p class="card-text" style="
+                                color: #555;
+                                font-size: 14px;
+                                line-height: 1.5;
+                                margin-bottom: 12px;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 2;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                min-height: 42px;
+                            ">${venue.description || 'Perfect venue for your special events.'}</p>
+                            <div class="row g-2 mb-3">
+                                <div class="col-12">
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-pin me-1"></i>${venue.location}
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">
+                                        <i class="fas fa-users me-1"></i>${venue.capacity} guests
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; justify-content: flex-start;">
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.location)}" target="_blank" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    text-decoration: none;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(23, 162, 184, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(23, 162, 184, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(23, 162, 184, 0.3)'">
+                                    <i class="fas fa-map-marker-alt" style="font-size: 12px;"></i><span>Map</span>
+                                </a>
+                                <button onclick="viewVenueDetails('${venue._id}')" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+                                    color: white;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(40, 167, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(40, 167, 69, 0.3)'">
+                                    <i class="fas fa-eye" style="font-size: 12px;"></i><span>Details</span>
+                                </button>
+                                <button onclick="openBookingModal('${venue._id}')" style="
+                                    padding: 11px 18px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+                                    color: #000;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 7px;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(255, 193, 7, 0.3)'">
+                                    <i class="fas fa-calendar-check" style="font-size: 12px;"></i><span>Book</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            favoritesGrid.innerHTML = venueCardsHtml;
         }
 
         // Filter functionality
