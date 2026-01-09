@@ -12,6 +12,13 @@ const bookingSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'Organizer is required']
   },
+  bookingEmail: {
+    type: String,
+    required: [true, 'Booking email is required'],
+    trim: true,
+    lowercase: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+  },
   eventName: {
     type: String,
     required: [true, 'Event name is required'],
