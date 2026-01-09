@@ -46,16 +46,19 @@ class PaymentController {
                 return res.status(400).json({ message: `Invalid transaction amount: ${booking.totalCost}` });
             }
 
-            if (!booking.organizer || !booking.organizer.email) {
-                return res.status(400).json({ message: 'Organizer email is missing. Please update your profile.' });
+            const userEmail = (booking.bookingEmail || (booking.organizer ? booking.organizer.email : "") || "").trim();
+
+            if (!userEmail) {
+                return res.status(400).json({ message: 'A valid email address is required for payment. Please update your booking or profile.' });
             }
 
-            console.log(`Initializing Paystack for Booking ${booking._id}: GHS ${booking.totalCost} (${amount} pesewas)`);
+            const currency = (process.env.PAYSTACK_CURRENCY || "GHS").trim().toUpperCase();
+            console.log(`Initializing Paystack for Booking ${booking._id}: ${currency} ${booking.totalCost} (${amount} subunits)`);
 
             const payload = {
-                "email": booking.organizer.email,
-                "amount": amount, // Paystack expects amount in pesewas/kobo as integer
-                "currency": "GHS",
+                "email": userEmail,
+                "amount": amount, // Paystack expects amount in subdivisions as integer
+                "currency": currency,
                 "metadata": {
                     "bookingId": booking._id,
                     "organizerName": booking.organizer.name,
@@ -77,18 +80,31 @@ class PaymentController {
                 booking.paystackReference = response.data.data.reference;
                 await booking.save();
 
-                // Add amount to the response data for the frontend
+                // Add amount and email to the response data for the frontend
                 response.data.data.amount = amount;
+                response.data.data.email = userEmail;
 
+                console.log('Paystack Initialization Success:', response.data.data.reference);
                 res.json(response.data);
             } else {
+                console.error('Paystack Initialization Failed:', response.data);
                 res.status(400).json({ message: 'Failed to initialize Paystack transaction' });
             }
         } catch (error) {
-            console.error('Error initializing Paystack:', error.response ? error.response.data : error.message);
+            const errorData = error.response ? error.response.data : null;
+            console.error('Error initializing Paystack:', errorData || error.message);
+
+            let message = 'Error initializing payment';
+            if (errorData && errorData.message === 'Currency not supported by merchant') {
+                message = `Currency '${process.env.PAYSTACK_CURRENCY || "GHS"}' is not supported by your Paystack account. Please ensure your Paystack account is set up for this currency or change PAYSTACK_CURRENCY in your .env file.`;
+            } else if (errorData && errorData.message) {
+                message = errorData.message;
+            }
+
             res.status(500).json({
-                message: 'Error initializing payment',
-                error: error.message
+                message: message,
+                error: error.message,
+                details: errorData
             });
         }
     }
@@ -502,6 +518,19 @@ class PaymentController {
                 message: 'Error processing refund',
                 error: error.message
             });
+        }
+    }
+
+    // New method to provide public key to frontend
+    static async getPaystackPublicKey(req, res) {
+        try {
+            const publicKey = process.env.PAYSTACK_PUBLIC_KEY;
+            if (!publicKey) {
+                return res.status(500).json({ message: 'Paystack Public Key not configured on server' });
+            }
+            res.json({ publicKey });
+        } catch (error) {
+            res.status(500).json({ message: 'Error retrieving public key' });
         }
     }
 }

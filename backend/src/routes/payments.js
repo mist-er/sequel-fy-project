@@ -38,9 +38,9 @@ router.post('/paystack/webhook', PaymentController.paystackWebhook);
 // @access  Private (Firebase Auth required)
 router.get('/:orderId', verifyFirebaseIdToken, PaymentController.getPaymentDetails);
 
-// @route   GET /api/payments/:bookingId/status
-// @desc    Get payment status for a booking (Legacy endpoint)
+// @route   GET /api/payments/paystack/public-key
+// @desc    Get Paystack Public Key
 // @access  Public
-router.get('/:bookingId/status', PaymentController.getPaymentStatus);
+router.get('/paystack/public-key', PaymentController.getPaystackPublicKey);
 
 module.exports = router;

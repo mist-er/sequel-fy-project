@@ -684,6 +684,27 @@
                             <div class="col-12">
                                 <div
                                     style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                                    <label for="bookingEmail" class="form-label fw-bold"
+                                        style="color: #2c3e50; margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                                        <div
+                                            style="width: 40px; height: 40px; background: linear-gradient(135deg, #ff6b35, #f7931e); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <span>Email Address *</span>
+                                    </label>
+                                    <input type="email" class="form-control" id="bookingEmail" name="booking_email"
+                                        required placeholder="Enter your email for booking confirmation"
+                                        style="border: 2px solid #e9ecef; border-radius: 12px; padding: 14px 18px; font-size: 16px; transition: all 0.3s;">
+                                    <div class="form-text mt-2" style="color: #6c757d; font-size: 13px;">
+                                        <i class="fas fa-info-circle me-1" style="color: #ff6b35;"></i>Mandatory for
+                                        payment processing
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div
+                                    style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
                                     <div class="row g-4">
                                         <div class="col-12 mb-2">
                                             <h5
@@ -1086,19 +1107,36 @@
 
     <script>
         const API_BASE = 'http://localhost:3000/api';
-        const PAYSTACK_PUBLIC_KEY = 'pk_live_abd71123626a60688c205672d269418120e94789'; // Live public key
+        let PAYSTACK_PUBLIC_KEY = '';
         let currentUser = null;
         window.selectedVenueId = null;
 
         // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             loadUserData();
+            await fetchPaystackKey();
             setupNavigation();
             loadVenues();
             loadBookings();
             loadUserFavorites();
             updateGreeting();
         });
+
+        async function fetchPaystackKey() {
+            try {
+                console.log('Fetching Paystack Public Key from:', `${API_BASE}/payments/paystack/public-key`);
+                const response = await fetch(`${API_BASE}/payments/paystack/public-key`);
+                const data = await response.json();
+                if (response.ok && data.publicKey) {
+                    PAYSTACK_PUBLIC_KEY = data.publicKey;
+                    console.log('Paystack Public Key successfully loaded from server:', PAYSTACK_PUBLIC_KEY.substring(0, 10) + '...');
+                } else {
+                    console.error('Failed to load Paystack Public Key:', data.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error fetching Paystack key:', error);
+            }
+        }
 
         function setupNavigation() {
             document.querySelectorAll('.nav-link[data-tab]').forEach(link => {
@@ -1149,6 +1187,12 @@
                 const name = currentUser.name || 'Organizer';
                 document.getElementById('userNameSidebar').textContent = name;
                 document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+
+                // Pre-fill booking email if field exists
+                const bookingEmailField = document.getElementById('bookingEmail');
+                if (bookingEmailField && currentUser.email) {
+                    bookingEmailField.value = currentUser.email;
+                }
             } else {
                 window.location.href = './login.html';
             }
@@ -1465,11 +1509,12 @@
         }
 
         async function makePayment(bookingId) {
-            if (!currentUser || !currentUser.email) {
+            // Pre-check for email (either from currentUser or we'll trust the booking has one)
+            if (!currentUser) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Profile Incomplete',
-                    text: 'A valid email address is required for payment. Please update your profile.',
+                    title: 'Authentication Required',
+                    text: 'Please log in to make a payment.',
                     confirmButtonColor: '#ff6b35'
                 });
                 return;
@@ -1513,10 +1558,30 @@
                 Swal.close();
 
                 // 2. Open Paystack Inline
+                if (!PAYSTACK_PUBLIC_KEY) {
+                    console.log('Public key missing, attempting last-minute fetch...');
+                    await fetchPaystackKey();
+                }
+
+                if (!PAYSTACK_PUBLIC_KEY) {
+                    throw new Error('Paystack Public Key is missing. Please ensure PAYSTACK_PUBLIC_KEY is set in the backend .env file.');
+                }
+
+                console.log('Final Paystack Config:', {
+                    keyPreview: PAYSTACK_PUBLIC_KEY ? PAYSTACK_PUBLIC_KEY.substring(0, 15) : 'NONE',
+                    accessCode: data.data.access_code,
+                    email: data.data.email
+                });
+
+                // Check if using Live key on Localhost (Paystack prohibits this)
+                if (PAYSTACK_PUBLIC_KEY && PAYSTACK_PUBLIC_KEY.startsWith('pk_live') &&
+                    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+                    throw new Error('Paystack does not allow LIVE transactions on localhost. Please use TEST keys.');
+                }
+
                 const handler = PaystackPop.setup({
                     key: PAYSTACK_PUBLIC_KEY,
-                    email: currentUser.email,
-                    amount: data.data.amount,
+                    email: data.data.email,
                     access_code: data.data.access_code,
                     onSuccess: function (response) {
                         // Payment successful
@@ -1974,6 +2039,7 @@
                 venue_id: selectedVenueId,
                 organizer_id: currentUser._id,
                 event_name: document.getElementById('eventName').value,
+                booking_email: document.getElementById('bookingEmail').value,
                 event_date: document.getElementById('eventDate').value,
                 end_date: document.getElementById('endDate').value,
                 start_time: document.getElementById('startTime').value,
